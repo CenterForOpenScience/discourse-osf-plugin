@@ -4,7 +4,7 @@ export default {
   name: "apply-details",
 
   initialize() {
-    console.log()
+    console.log("initialize")
     withPluginApi('0.1', api => {
       console.log(api)
     });
