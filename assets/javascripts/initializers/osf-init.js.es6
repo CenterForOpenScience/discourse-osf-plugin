@@ -7,8 +7,25 @@ export default {
     console.log("initialize")
     withPluginApi('0.1', api => {
       api.decorateWidget('header:after', helper => {
-        console.log('hello');
-        return helper.cooked("<div style='height: 10px; background-color: #222'></div>");
+        helper.connect(Ember.View.extend({
+          tagName: 'div',
+          classNames: ['project_bar'],
+          template: Ember.HTMLBars.compile("
+            <ul>
+              {{#each navbuttons as |button|}}
+                <li>{{button}}</li>
+              {{/each}}
+            </ul>
+          ")
+        }).create({
+          navbuttons: [
+            "Project Name",
+            "Files",
+            "Forum",
+            "Wiki",
+            "Analytics"
+          ]
+        }))
       })
     });
   }
