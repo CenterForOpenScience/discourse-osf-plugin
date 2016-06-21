@@ -4,8 +4,9 @@ export default {
   name: "apply-details",
 
   initialize() {
-    //withPluginApi('0.1', api => {
-      alert('Help!')
-    //});
+    console.log()
+    withPluginApi('0.1', api => {
+      console.log(api)
+    });
   }
 };
