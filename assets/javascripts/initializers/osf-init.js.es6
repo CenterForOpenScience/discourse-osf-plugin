@@ -10,13 +10,7 @@ export default {
         helper.connect(Ember.View.extend({
           tagName: 'div',
           classNames: ['project_bar'],
-          template: Ember.HTMLBars.compile("
-            <ul>
-              {{#each navbuttons as |button|}}
-                <li>{{button}}</li>
-              {{/each}}
-            </ul>
-          ")
+          template: Ember.HTMLBars.compile("<ul>{{#each navbuttons as |button|}}<li>{{button}}</li>{{/each}}</ul>")
         }).create({
           navbuttons: [
             "Project Name",
