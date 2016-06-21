@@ -7,7 +7,7 @@ export default {
     console.log("initialize")
     withPluginApi('0.1', api => {
       api.decorateWidget('header:after', h => {
-        h.h('ul.menubar',
+        return h.h('ul.menubar',
           {
             style: {
               height: "40px",
@@ -17,7 +17,7 @@ export default {
           h.h('li.project_name', 'Project_Name'),
           h.h('li.files', 'Files'),
           h.h('li.forum', 'Forum')
-        )
+        );
         //helper.connect(Ember.View.extend({
         //  tagName: 'div',
         //  classNames: ['project_bar'],
