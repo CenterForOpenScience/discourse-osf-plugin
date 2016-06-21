@@ -8,7 +8,7 @@ export default {
     withPluginApi('0.1', api => {
       api.decorateWidget('header:after', () => {
         console.log('hello');
-        return "ITS A STRING.";
+        return "<div style='height: 10px; background-color: #222'></div>";
       })
     });
   }
