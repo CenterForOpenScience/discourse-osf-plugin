@@ -6,9 +6,9 @@ export default {
   initialize() {
     console.log("initialize")
     withPluginApi('0.1', api => {
-      api.decorateWidget('header:after', () => {
+      api.decorateWidget('header:after', helper => {
         console.log('hello');
-        return "<div style='height: 10px; background-color: #222'></div>";
+        return helper.cooked("<div style='height: 10px; background-color: #222'></div>");
       })
     });
   }
