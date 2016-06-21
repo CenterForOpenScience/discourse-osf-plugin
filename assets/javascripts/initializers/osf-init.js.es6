@@ -6,7 +6,10 @@ export default {
   initialize() {
     console.log("initialize")
     withPluginApi('0.1', api => {
-      console.log(api)
+      api.decorateWidget('header:after', () => {
+        console.log('hello');
+        return "ITS A STRING.";
+      })
     });
   }
 };
