@@ -1,0 +1,6 @@
+# below-sitemap
+
+en:
+  site_settings:
+    below_sitemap_active: "Show Content in Hambuger Menu"
+    below_sitemap_content: "Content to show in Hambuger Menu. Individual items need to be enclosed in LI tags."
