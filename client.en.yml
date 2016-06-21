@@ -1,0 +1,7 @@
+# below-sitemap
+
+en:
+  admin:
+    site_settings:
+      categories:
+         plugins: "Below Sitemap"
