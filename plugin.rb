@@ -3,4 +3,4 @@
 # version: 0.1
 # author: me
 
-register_asset "assets/javascripts/discourse/services/osf_service.js.es6"
+#register_asset "assets/javascripts/discourse/services/osf_service.js.es6"
