@@ -1,13 +1,13 @@
-export default Ember.Service.extend({
-  value: null,
+//export default Ember.Service.extend({
+//  value: null,
+//
+//  unsetValue() {
+//    this.get('value').setObjects([]);
+//  },
 
-  unsetValue() {
-    this.get('value').setObjects([]);
-  },
+//  pushValue(pushed_value) {
+//    this.get().pushObject(pushed_value);
+//  }
 
-  pushValue(pushed_value) {
-    this.get().pushObject(pushed_value);
-  }
-
-});
+//});
     
