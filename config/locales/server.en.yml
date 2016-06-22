@@ -2,4 +2,4 @@
 
 en:
   site_settings:
-    below_sitemap_content: "Enable Open Science Framework integration with Discourse."
+    osf_widgets_active: "Enable Open Science Framework integration with Discourse."
