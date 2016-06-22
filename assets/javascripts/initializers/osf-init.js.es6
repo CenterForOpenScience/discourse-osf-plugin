@@ -49,14 +49,14 @@ export default {
         window.__this = this;
         console.log(enteredAt);
         var data_var = this.get('controller.model');
-        w.updateLinks(data_var)
+        w.updateLinks(data_var);
         console.log(this.get('controller.enteredAt'));
         if (enteredAt && (this.get('lastEnteredAt') !== enteredAt)) {
           console.log('osfTopicLoadfn called and got inside conditional');
           var data_var = this.get('controller.model');
           w.updateLinks(data_var);
         }
-      }.observes('controller.enteredAt');
+      }.observes('controller.enteredAt')
     })
     
     withPluginApi('0.1', api => {
