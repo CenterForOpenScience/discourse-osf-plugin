@@ -15,7 +15,7 @@ export default {
       
       defaultState() {
         return {
-          guid: null
+          guid: ''
         }
       },
       
@@ -31,27 +31,32 @@ export default {
             h('li#project_name', {}, `${state.guid}`),
             h('li#files', {}, "Files"),
             h('li#forum', {}, "Forum"),
-            h('li#wiki', {}, "Wiki")
+            h('li#wiki', {}, "Wiki");
           )
         );
       }
 
     });
     
+    w.updateLinks('jhgjhgj')
+    
     console.log(w)
-    window.my_widget = w
+    window['my_widget'] = w
     TopicView.reopen({
       _osfTopicLoad: function() {
         const enteredAt = this.get('controller.enteredAt');
-        console.log(this)
-        window.__this = this
-        console.log(enteredAt)
+        console.log(this);
+        window.__this = this;
+        console.log(enteredAt);
+        var data_var = this.get('controller.model');
+        w.updateLinks(data_var)
+        console.log(this.get('controller.enteredAt'));
         if (enteredAt && (this.get('lastEnteredAt') !== enteredAt)) {
-          console.log('osfTopicLoadfn calld and got inside conditional')
-          var data_var = this.get('controller.model')
-          w.updateLinks(data_var)
+          console.log('osfTopicLoadfn called and got inside conditional');
+          var data_var = this.get('controller.model');
+          w.updateLinks(data_var);
         }
-      }.observes('controller.enteredAt')
+      }.observes('controller.enteredAt');
     })
     
     withPluginApi('0.1', api => {
