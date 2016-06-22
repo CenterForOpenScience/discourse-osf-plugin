@@ -37,6 +37,7 @@ export default {
           )
         );
       }
+
     });
     
     TopicView.reopen({
