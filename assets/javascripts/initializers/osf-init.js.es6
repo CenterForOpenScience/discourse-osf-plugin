@@ -38,10 +38,16 @@ export default {
 
     });
     
+    console.log(w)
+    window.my_widget = w
     TopicView.reopen({
       _osfTopicLoad: function() {
         const enteredAt = this.get('controller.enteredAt');
+        console.log(this)
+        window.__this = this
+        console.log(enteredAt)
         if (enteredAt && (this.get('lastEnteredAt') !== enteredAt)) {
+          console.log('osfTopicLoadfn calld and got inside conditional')
           w.updateLinks(this.get('controller.model'))
         }
       }.observes('controller.enteredAt')
