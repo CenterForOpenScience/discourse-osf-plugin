@@ -11,7 +11,8 @@ createWidget('projectmenu', {
         height: '44px',
         backgroundColor: '#eee',
         boxShadow: '0 0 9px -1px #838383'
-      },
+      }
+    },
       h('ul', {
         style: {
           width: '940px',
