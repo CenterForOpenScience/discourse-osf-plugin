@@ -9,31 +9,7 @@ export default {
 
   initialize() {
     
-    createWidget('projectmenu', {
-      tagName: 'div',
 
-      html(attrs) { 
-        return h('div#project_header', {
-          style: {
-            height: '44px',
-            backgroundColor: '#eee',
-            boxShadow: '0 0 9px -1px #838383'
-          }
-        },
-          h('ul', {
-            style: {
-              width: '940px',
-              margin: '0 auto'
-            }
-          }, [
-            h('li#project_name', "Project Name"),
-            h('li#files', "Files"),
-            h('li#forum', "Forum"),
-            h('li#wiki', "Wiki")
-          ])
-        );
-      },
-    });
     
     console.log("initialize")
     withPluginApi('0.1', api => {
