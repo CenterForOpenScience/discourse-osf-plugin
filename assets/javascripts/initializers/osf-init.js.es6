@@ -6,7 +6,7 @@ createWidget('projectmenu', {
   tagName: 'div',
 
   html(attrs) { 
-    return h('div',
+    return h('div', {
       style: {
         height: '44px',
         backgroundColor: '#eee',
