@@ -48,7 +48,8 @@ export default {
         console.log(enteredAt)
         if (enteredAt && (this.get('lastEnteredAt') !== enteredAt)) {
           console.log('osfTopicLoadfn calld and got inside conditional')
-          w.updateLinks(this.get('controller.model'))
+          var data_var = this.get('controller.model')
+          w.updateLinks(data_var)
         }
       }.observes('controller.enteredAt')
     })
