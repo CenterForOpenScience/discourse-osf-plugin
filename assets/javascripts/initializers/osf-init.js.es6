@@ -31,7 +31,7 @@ export default {
             h('li#project_name', {}, `${state.guid}`),
             h('li#files', {}, "Files"),
             h('li#forum', {}, "Forum"),
-            h('li#wiki', {}, "Wiki");
+            h('li#wiki', {}, "Wiki")
           )
         );
       }
