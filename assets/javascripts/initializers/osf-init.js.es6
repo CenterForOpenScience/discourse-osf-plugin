@@ -9,7 +9,20 @@ export default {
 
   initialize() {
     
-
+    createWidget('projectmenu', {
+      tagName: 'div',
+      
+      html(attrs, state) { 
+        return h('div#project_header',
+          h('ul.wrap', [
+            h('li#project_name', {href: ``}, "Project Name"),
+            h('li#files', {}, "Files"),
+            h('li#forum', {}, "Forum"),
+            h('li#wiki', {}, "Wiki")
+          ])
+        );
+      },
+    });
     
     console.log("initialize")
     withPluginApi('0.1', api => {
