@@ -10,31 +10,45 @@ export default {
 
   initialize() {
 
-    TopicView.reopen({
-      _osfTopicLoad: function() {
-        alert("HEY");
-      }.observes('controller.enteredAt')
-    })
+
     
     var w = createWidget('projectmenu', {
       tagName: 'div',
       
-      update() {
-        console.log('IM UPDATING')
+      defaultState: {
+        return {
+          guid: null
+        }
+      }
+      
+      updateLinks(name) {
+        console.log('IM UPDATING');
+        this.state.guid = name
+        
       },
       
       html(attrs, state) { 
-        return h('div#project_header',
-          h('ul.wrap', [
-            h('li#project_name', {}, "Project Name"),
+        return h('div#project_header', 
+          {},
+          h('ul.wrap', 
+            {},
+            h('li#project_name', {}, `${state.guid}`),
             h('li#files', {}, "Files"),
             h('li#forum', {}, "Forum"),
             h('li#wiki', {}, "Wiki")
-          ])
+          )
         );
       },
     });
     
+    TopicView.reopen({
+      _osfTopicLoad: function() {
+        const enteredAt = this.get('controller.enteredAt');
+        if (enteredAt && (this.get('lastEnteredAt') !== enteredAt)) {
+          w.updateLinks(this.get('controller.model'))
+        }
+      }.observes('controller.enteredAt')
+    })
     console.log("initialize")
     withPluginApi('0.1', api => {
       api.decorateWidget('header:after', utils => {
