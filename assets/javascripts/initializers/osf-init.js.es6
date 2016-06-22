@@ -22,7 +22,8 @@ createWidget('projectmenu', {
         h('li#files', "Files"),
         h('li#forum', "Forum"),
         h('li#wiki', "Wiki")
-      );
+      )
+    );
   },
 });
 
