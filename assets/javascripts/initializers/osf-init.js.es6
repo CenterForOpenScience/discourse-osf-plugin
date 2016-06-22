@@ -1,6 +1,7 @@
 import { withPluginApi } from 'discourse/lib/plugin-api';
-import { createWidget } from 'discourse/widgets/widget';
+import { createWidget, Widget } from 'discourse/widgets/widget';
 import { h } from 'virtual-dom';
+import { TopicView } from 'discourse/views/topic';
 
 
 
@@ -9,13 +10,17 @@ export default {
 
   initialize() {
     
-    createWidget('projectmenu', {
+    var w = createWidget('projectmenu', {
       tagName: 'div',
+      
+      update() {
+        console.log('IM UPDATING')
+      },
       
       html(attrs, state) { 
         return h('div#project_header',
           h('ul.wrap', [
-            h('li#project_name', {href: ``}, "Project Name"),
+            h('li#project_name', {}, "Project Name"),
             h('li#files', {}, "Files"),
             h('li#forum', {}, "Forum"),
             h('li#wiki', {}, "Wiki")
@@ -23,6 +28,12 @@ export default {
         );
       },
     });
+    
+    TopicView.reopen({
+      _osfTopicLoad: function() {
+        alert("HEY");
+      }.observes('controller.enteredAt')
+    })
     
     console.log("initialize")
     withPluginApi('0.1', api => {
