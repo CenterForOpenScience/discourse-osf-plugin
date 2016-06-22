@@ -25,12 +25,12 @@ export default {
               width: '940px',
               margin: '0 auto'
             }
-          },
+          }, [
             h('li#project_name', "Project Name"),
             h('li#files', "Files"),
             h('li#forum', "Forum"),
             h('li#wiki', "Wiki")
-          )
+          ])
         );
       },
     });
