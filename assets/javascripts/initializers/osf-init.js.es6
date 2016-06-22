@@ -13,7 +13,7 @@ export default {
       tagName: 'div',
 
       html(attrs) { 
-        return h('div', {
+        return h('div#project_header', {
           style: {
             height: '44px',
             backgroundColor: '#eee',
