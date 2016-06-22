@@ -15,7 +15,7 @@ export default {
     var w = createWidget('projectmenu', {
       tagName: 'div',
       
-      defaultState: {
+      defaultState() {
         return {
           guid: null
         }
