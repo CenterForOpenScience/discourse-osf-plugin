@@ -38,7 +38,7 @@ export default {
     console.log("initialize")
     withPluginApi('0.1', api => {
       api.decorateWidget('header:after', utils => {
-        utils.attach('projectmenu')
+        return utils.attach('projectmenu')
       })
     });
   }
