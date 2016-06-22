@@ -9,6 +9,12 @@ export default {
   name: "apply-osf",
 
   initialize() {
+
+    TopicView.reopen({
+      _osfTopicLoad: function() {
+        alert("HEY");
+      }.observes('controller.enteredAt')
+    })
     
     var w = createWidget('projectmenu', {
       tagName: 'div',
@@ -28,12 +34,6 @@ export default {
         );
       },
     });
-    
-    TopicView.reopen({
-      _osfTopicLoad: function() {
-        alert("HEY");
-      }.observes('controller.enteredAt')
-    })
     
     console.log("initialize")
     withPluginApi('0.1', api => {
