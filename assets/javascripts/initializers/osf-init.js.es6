@@ -10,26 +10,42 @@ export default {
 
   initialize() {
 
+    function createStateObject() {
+      var state = {};
+      return {
+        function setState(state_value) {
+          state = state_value;
+        },
+        function getState() {
+          return state;
+        }
+      }
+    }
+
+    const osf_pb_st = createStateObject()
+
+    osf_pd_st.setState({
+      title: ""
+    })
+
     createWidget('projectmenu', {
       tagName: 'div',
-      
-      defaultState() {
-        return {
-          title: ''
-        }
-      },
-      
+
       updateLinks(title) {
-        console.log('IM UPDATING');
-        console.log(`naem is ${title}`)
-        this.state.title = title
-        
+        return osf_pd__st.setState(function() {
+          var current_state osf_pd_st.getState();
+          current_state.title = title;
+          return current_state;
       },
       
       html(attrs) { 
+        const base_osf_url = 'http://mechanysm.com';
+        const base_disc_url = 'http://mechanysm.com';
         return h('div#project_header',
           h('ul.wrap', [
-            h('li#project_name', `${this.state.title}`),
+            h('li#project_name', {
+              'data-osf-target': `${base_osf_url}/${osf_pb_st.getState().title}/`
+            }, `${osf_pb_st.getState().title}`),
             h('li#files', "Files"),
             h('li#forum', "Forum"),
             h('li#wiki', "Wiki")
