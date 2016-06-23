@@ -13,14 +13,20 @@ export default {
 
     function createStateObject() {
       var state = {};
-      return {
-        setState: function(state_value) {
+      
+      function setState(state_value) {
           state = state_value;
-        },
-        getState: function() {
-          return state;
-        }
+      };
+      
+      function getState() {
+        return state;
+      };
+      
+      return {
+        setState: setState,
+        getState: getState
       }
+      
     }
 
     const osf_pb_st = createStateObject()
@@ -62,25 +68,22 @@ export default {
         return menu_bar
       })
     });
-
+    
+    function updateProjectBar() {
+      var title = this.get('topic.title')
+      console.log(title);
+      var new_state = osf_pb_st.setState(function() {
+        var current_state = osf_pb_st.getState();
+        current_state.title = title;
+        return current_state;
+      });
+      console.log(menu_bar);
+      menu_bar.rerenderResult();
+    }
+    
     TopicView.reopen({
-      osfUpdateProjectBar: function() {
-      
-        var title = this.get('topic.title')
-        console.log(title);
-        var new_state = osf_pb_st.setState(function() {
-          var current_state = osf_pb_st.getState();
-          current_state.title = title;
-          return current_state;
-        });
-        console.log(menu_bar);
-        menu_bar.rerenderResult();
-      
-      //}.observes('model.title')
-      }.observes('controller.enteredAt')
-      
-    })    
-  
+      osfUpdateProjectBar: updateProjectBar.observes('controller.enteredAt')
+    });
     
     //`
     //
