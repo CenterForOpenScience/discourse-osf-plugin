@@ -1,5 +1,6 @@
 import { withPluginApi } from 'discourse/lib/plugin-api';
 import { createWidget, Widget } from 'discourse/widgets/widget';
+import 'discourse/widgets/header';
 import { h } from 'virtual-dom';
 import TopicView from 'discourse/views/topic';
 
@@ -36,9 +37,10 @@ export default {
           var current_state = osf_pd_st.getState();
           current_state.title = title;
           return current_state;
+        });
       },
       
-      html(attrs) { 
+      html(attrs) {
         const base_osf_url = 'http://mechanysm.com';
         const base_disc_url = 'http://mechanysm.com';
         return h('div#project_header',
@@ -90,33 +92,34 @@ export default {
     })    
   
     
-    `
-      html(attrs, state) {
-        const panels = [this.attach('header-buttons', attrs),
-                        this.attach('header-icons', { hamburgerVisible: state.hamburgerVisible,
-                                                      userVisible: state.userVisible,
-                                                      searchVisible: state.searchVisible,
-                                                      flagCount: attrs.flagCount })];
+    //`
+    //
+    //  html(attrs, state) {
+    //    const panels = [this.attach('header-buttons', attrs),
+    //                    this.attach('header-icons', { hamburgerVisible: state.hamburgerVisible,
+    //                                                  userVisible: state.userVisible,
+    //                                                  searchVisible: state.searchVisible,
+    //                                                  flagCount: attrs.flagCount })];
 
-        if (state.searchVisible) {
-          panels.push(this.attach('search-menu', { contextEnabled: state.contextEnabled }));
-        } else if (state.hamburgerVisible) {
-          panels.push(this.attach('hamburger-menu'));
-        } else if (state.userVisible) {
-          panels.push(this.attach('user-menu'));
-        }
+    //    if (state.searchVisible) {
+    //      panels.push(this.attach('search-menu', { contextEnabled: state.contextEnabled }));
+    //    } else if (state.hamburgerVisible) {
+    //      panels.push(this.attach('hamburger-menu'));
+    //    } else if (state.userVisible) {
+    //      panels.push(this.attach('user-menu'));
+    //    }
 
-        const contents = [ this.attach('home-logo', { minimized: !!attrs.topic }),
-                           h('div.panel.clearfix', panels) ];
+    //    const contents = [ this.attach('home-logo', { minimized: !!attrs.topic }),
+    //                       h('div.panel.clearfix', panels) ];
 
-        if (attrs.topic) {
-          contents.push(this.attach('header-topic-info', attrs));
-        }
+    //    if (attrs.topic) {
+    //      contents.push(this.attach('header-topic-info', attrs));
+    //    }
 
-        return h('div.wrap', h('div.contents.clearfix', contents));
-      }
+    //    return h('div.wrap', h('div.contents.clearfix', contents));
+    //  }
       
-    }
-    `
+    //}
+    //`
   }
 };
