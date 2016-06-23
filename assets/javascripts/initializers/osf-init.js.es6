@@ -49,7 +49,7 @@ export default {
         return h('div#project_header',
           h('ul.wrap', {
             onclick: function(e) {
-              window.location.replace(e.target.dataset.osfTarget)''
+              window.location.replace(e.target.dataset.osfTarget);
             }
           }, [
             h('li#project_name', {
