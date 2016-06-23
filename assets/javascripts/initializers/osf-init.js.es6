@@ -60,7 +60,7 @@ export default {
       //  }
       //}.observes('controller.enteredAt')
       
-      osfUpdateProjectBar: function()
+      osfUpdateProjectBar: function() {
       
         const title = this.get('model.title')
         menu_bar.sendWidgetAction('updateLinks', title)
