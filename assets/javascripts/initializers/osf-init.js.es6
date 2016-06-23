@@ -1,6 +1,6 @@
 import { withPluginApi } from 'discourse/lib/plugin-api';
 import { createWidget, Widget } from 'discourse/widgets/widget';
-import 'discourse/widgets/header' as Header;
+//import 'discourse/widgets/header' as Header;
 import { h } from 'virtual-dom';
 import TopicView from 'discourse/views/topic';
 
