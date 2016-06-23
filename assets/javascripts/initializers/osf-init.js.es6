@@ -19,17 +19,17 @@ export default {
         }
       },
       
-      updateLinks(name) {
+      updateLinks(title) {
         console.log('IM UPDATING');
-        console.log(`naem is ${name}`)
-        this.state.guid = name
+        console.log(`naem is ${title}`)
+        this.state.title = title
         
       },
       
-      html(attrs, state) { 
+      html(attrs) { 
         return h('div#project_header',
           h('ul.wrap', [
-            h('li#project_name', `${state.guid}`),
+            h('li#project_name', `${this.state.title}`),
             h('li#files', "Files"),
             h('li#forum', "Forum"),
             h('li#wiki', "Wiki")
