@@ -33,11 +33,8 @@ export default {
       tagName: 'div',
 
       updateLinks(title) {
-        return osf_pb_st.setState(function() {
-          var current_state = osf_pb_st.getState();
-          current_state.title = title;
-          return current_state;
-        });
+        
+
       },
       
       html(attrs) {
@@ -68,26 +65,19 @@ export default {
 
     TopicView.reopen({
       osfUpdateProjectBar: function() {
-      //_osfTopicLoad: function() {
-      //  const enteredAt = this.get('controller.enteredAt');
-      //  var topic = this.get('topic');
-      //  var model
-      //  menu_bar.sendWidgetAction('updateLinks', data_var);
-      //  if (enteredAt && (this.get('lastEnteredAt') !== enteredAt)) {
-      //    console.log('osfTopicLoadfn called and got inside conditional');
-      //    var data_var = this.get('controller.model');
-      //    menu_bar.sendWidgetAction('updateLinks', data_var);
-      //  }
-      
-
       
         var title = this.get('topic.title')
         console.log(title);
-        menu_bar.updateLinks(title);
+        var new_state = osf_pb_st.setState(function() {
+          var current_state = osf_pb_st.getState();
+          current_state.title = title;
+          return current_state;
+        });
+        console.log(menu_bar);
+        menu_bar.rerenderResult();
       
       //}.observes('model.title')
       }.observes('controller.enteredAt')
-      
       
     })    
   
