@@ -48,6 +48,7 @@ export default {
     });
 
     TopicView.reopen({
+      osfUpdateProjectBar: function() {
       //_osfTopicLoad: function() {
       //  const enteredAt = this.get('controller.enteredAt');
       //  var topic = this.get('topic');
@@ -58,14 +59,16 @@ export default {
       //    var data_var = this.get('controller.model');
       //    menu_bar.sendWidgetAction('updateLinks', data_var);
       //  }
-      //}.observes('controller.enteredAt')
       
-      osfUpdateProjectBar: function() {
+
       
         const title = this.get('model.title')
         menu_bar.sendWidgetAction('updateLinks', title)
       
-      }.observes('model.title')
+      //}.observes('model.title')
+      }.observes('controller.enteredAt')
+      
+      
     })    
   
   }
