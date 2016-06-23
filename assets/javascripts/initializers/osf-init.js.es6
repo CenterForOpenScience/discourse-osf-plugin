@@ -15,7 +15,7 @@ export default {
       
       defaultState() {
         return {
-          guid: ''
+          title: ''
         }
       },
       
