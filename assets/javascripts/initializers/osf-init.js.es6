@@ -10,13 +10,8 @@ export default {
 
   initialize() {
 
-    var menuBar;
     createWidget('projectmenu', {
       tagName: 'div',
-      
-      init() {
-        
-      }
       
       defaultState() {
         return {
@@ -43,30 +38,35 @@ export default {
 
     });
     
-    console.log(w)
-    window['my_widget'] = w
-    TopicView.reopen({
-      _osfTopicLoad: function() {
-        const enteredAt = this.get('controller.enteredAt');
-        console.log(this);
-        window.__this = this;
-        console.log(enteredAt);
-        var data_var = this.get('controller.model');
-        Widget.sendWidgetAction('projectmenu', 'updateLinks')(data_var);
-        console.log(this.get('controller.enteredAt'));
-        if (enteredAt && (this.get('lastEnteredAt') !== enteredAt)) {
-          console.log('osfTopicLoadfn called and got inside conditional');
-          var data_var = this.get('controller.model');
-          w.updateLinks(data_var);
-        }
-      }.observes('controller.enteredAt')
-    })
+    var menu_bar;
     
     withPluginApi('0.1', api => {
-      api.decorateWidget('header:after', utils => {
-        return utils.attach('projectmenu')
+      api.decorateWidget('header:after', dh => {
+        menu_bar = dh.attach('projectmenu');
+        return menu_bar
       })
     });
-    
+
+    TopicView.reopen({
+      //_osfTopicLoad: function() {
+      //  const enteredAt = this.get('controller.enteredAt');
+      //  var topic = this.get('topic');
+      //  var model
+      //  menu_bar.sendWidgetAction('updateLinks', data_var);
+      //  if (enteredAt && (this.get('lastEnteredAt') !== enteredAt)) {
+      //    console.log('osfTopicLoadfn called and got inside conditional');
+      //    var data_var = this.get('controller.model');
+      //    menu_bar.sendWidgetAction('updateLinks', data_var);
+      //  }
+      //}.observes('controller.enteredAt')
+      
+      osfUpdateProjectBar: function()
+      
+        const title = this.get('model.title')
+        menu_bar.sendWidgetAction('updateLinks', title)
+      
+      }.observes('model.title')
+    })    
+  
   }
 };
