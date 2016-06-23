@@ -10,8 +10,13 @@ export default {
 
   initialize() {
 
-    var w = createWidget('projectmenu', {
+    var menuBar;
+    createWidget('projectmenu', {
       tagName: 'div',
+      
+      init() {
+        
+      }
       
       defaultState() {
         return {
@@ -38,8 +43,6 @@ export default {
 
     });
     
-    w.updateLinks('jhgjhgj')
-    
     console.log(w)
     window['my_widget'] = w
     TopicView.reopen({
@@ -49,7 +52,7 @@ export default {
         window.__this = this;
         console.log(enteredAt);
         var data_var = this.get('controller.model');
-        w.updateLinks(data_var);
+        Widget.sendWidgetAction('projectmenu', 'updateLinks')(data_var);
         console.log(this.get('controller.enteredAt'));
         if (enteredAt && (this.get('lastEnteredAt') !== enteredAt)) {
           console.log('osfTopicLoadfn called and got inside conditional');
