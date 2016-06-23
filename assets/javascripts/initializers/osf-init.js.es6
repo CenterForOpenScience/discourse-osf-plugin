@@ -47,13 +47,38 @@ export default {
         const base_osf_url = 'http://mechanysm.com';
         const base_disc_url = 'http://mechanysm.com';
         return h('div#project_header',
-          h('ul.wrap', [
+          h('ul.wrap', {
+            onclick: function(e) {
+              window.location.replace(e.target.dataset.osfTarget)''
+            }
+          }, [
             h('li#project_name', {
               'data-osf-target': `${base_osf_url}/${osf_pb_st.getState().title}/`
             }, `${osf_pb_st.getState().title}`),
-            h('li#files', "Files"),
-            h('li#forum', "Forum"),
-            h('li#wiki', "Wiki")
+            h('li#files', {
+              'data-osf-target': `${base_osf_url}/${osf_pb_st.getState().title}/files`
+            }, "Files"),
+            h('li#forum', {
+              'data-osf-target': `${base_disc_url}/groups/${osf_pb_st.getState().title}`
+            }, "Forum"),
+            h('li#wiki', {
+              'data-osf-target': `${base_disc_url}/${osf_pb_st.getState().title}`
+            }, "Wiki"),
+            h('li#analytics', {
+              'data-osf-target': `${base_disc_url}/${osf_pb_st.getState().title}/analytics`
+            }, "Analytics")
+            h('li#registrations', {
+              'data-osf-target': `${base_disc_url}/${osf_pb_st.getState().title}/registrations`
+            }, "Registrations")
+            h('li#forks', {
+              'data-osf-target': `${base_disc_url}/${osf_pb_st.getState().title}/forks`
+            }, "Forks")
+            h('li#contributors', {
+              'data-osf-target': `${base_disc_url}/${osf_pb_st.getState().title}/contributors`
+            }, "contributors")
+            h('li#settings', {
+              'data-osf-target': `${base_disc_url}/${osf_pb_st.getState().title}/settings`
+            }, "Settings")
           ])
         );
       }
