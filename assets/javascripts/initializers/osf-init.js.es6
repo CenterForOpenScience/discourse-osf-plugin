@@ -21,6 +21,7 @@ export default {
       
       updateLinks(name) {
         console.log('IM UPDATING');
+        console.log(`naem is ${name}`)
         this.state.guid = name
         
       },
