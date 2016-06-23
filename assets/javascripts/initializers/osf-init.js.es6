@@ -29,7 +29,7 @@ export default {
       html(attrs, state) { 
         return h('div#project_header',
           h('ul.wrap', [
-            h('li#project_name', 'state'),
+            h('li#project_name', `${state.guid}`),
             h('li#files', "Files"),
             h('li#forum', "Forum"),
             h('li#wiki', "Wiki")
