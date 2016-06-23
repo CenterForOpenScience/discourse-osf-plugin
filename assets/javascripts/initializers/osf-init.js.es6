@@ -62,7 +62,7 @@ export default {
       
 
       
-        const title = this.get('model.title')
+        const title = this.get('topic.title')
         menu_bar.sendWidgetAction('updateLinks', title)
       
       //}.observes('model.title')
