@@ -1,6 +1,6 @@
 import { withPluginApi } from 'discourse/lib/plugin-api';
 import { createWidget, Widget } from 'discourse/widgets/widget';
-import 'discourse/widgets/header';
+import 'discourse/widgets/header' as Header;
 import { h } from 'virtual-dom';
 import TopicView from 'discourse/views/topic';
 
@@ -25,7 +25,7 @@ export default {
 
     const osf_pb_st = createStateObject()
 
-    osf_pd_st.setState({
+    osf_pb_st.setState({
       title: ""
     })
 
@@ -33,8 +33,8 @@ export default {
       tagName: 'div',
 
       updateLinks(title) {
-        return osf_pd__st.setState(function() {
-          var current_state = osf_pd_st.getState();
+        return osf_pb_st.setState(function() {
+          var current_state = osf_pb_st.getState();
           current_state.title = title;
           return current_state;
         });
