@@ -82,7 +82,7 @@ export default {
     }
     
     TopicView.reopen({
-      osfUpdateProjectBar: updateProjectBar.observes('controller.enteredAt')
+      osfUpdateProjectBar: updateProjectBar.observes('topic')
     });
     
     //`
