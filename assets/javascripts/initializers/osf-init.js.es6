@@ -13,10 +13,10 @@ export default {
     function createStateObject() {
       var state = {};
       return {
-        function setState(state_value) {
+        setState: function(state_value) {
           state = state_value;
         },
-        function getState() {
+        getState: function() {
           return state;
         }
       }
