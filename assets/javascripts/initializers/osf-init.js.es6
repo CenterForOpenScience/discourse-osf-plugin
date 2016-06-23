@@ -72,11 +72,11 @@ export default {
     function updateProjectBar() {
       var title = this.get('topic.title')
       console.log(title);
-      var new_state = osf_pb_st.setState(function() {
+      var new_state = osf_pb_st.setState((function() {
         var current_state = osf_pb_st.getState();
         current_state.title = title;
         return current_state;
-      });
+      })());
       console.log(menu_bar);
       menu_bar.rerenderResult();
     }
