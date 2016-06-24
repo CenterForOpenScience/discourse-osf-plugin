@@ -115,7 +115,7 @@ export default {
     console.log(_activate);
     TopicRoute.reopen({
       activate() {
-        _activate();
+        _activate.bind(this)();
       }
     })
     
