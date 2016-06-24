@@ -110,9 +110,8 @@ export default {
     var _activate = TopicRoute.proto().activate;
     console.log(TopicRoute)
     console.log(TopicRoute.prototype)
-
-    debugger;
-    
+    console.log(TopicRoute.proto())
+    console.log(TopicRoute.proto().activate)    
     console.log(_activate);
     TopicRoute.reopen({
       activate() {
