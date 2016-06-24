@@ -113,9 +113,9 @@ export default {
     console.log(TopicRoute.proto())
     console.log(TopicRoute.proto().activate)    
     console.log(_activate);
-    TopicRoute.reopenClass({
+    TopicRoute.reopen({
       activate() {
-        
+        console.log(this)
         _activate.bind(this)();
         updateProjectBar.bind(this)();
         
