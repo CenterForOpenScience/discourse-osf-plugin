@@ -107,7 +107,7 @@ export default {
       menu_bar.scheduleRerender();
     }
     
-    var _activate = TopicRoute.prototype.activate;
+    var _activate = TopicRoute.proto().activate;
     console.log(TopicRoute)
     console.log(TopicRoute.prototype)
 
