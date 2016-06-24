@@ -113,7 +113,7 @@ export default {
     console.log(TopicRoute.proto())
     console.log(TopicRoute.proto().activate)    
     console.log(_activate);
-    TopicRoute.reopen({
+    TopicRoute.reopenClass({
       activate() {
         
         _activate.bind(this)();
