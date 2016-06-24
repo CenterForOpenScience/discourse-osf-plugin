@@ -108,7 +108,7 @@ export default {
     }
     
     var _activate = TopicRoute.activate;
-    
+    console.log(_activate);
     TopicRoute.reopen({
       activate: function() {
         debugger;
