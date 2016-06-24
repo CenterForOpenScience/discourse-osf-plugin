@@ -117,7 +117,7 @@ export default {
       activate() {
         
         _activate.bind(this)();
-        updateProjectBar();
+        updateProjectBar.bind(this)();
         
       }
     })
