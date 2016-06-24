@@ -3,6 +3,7 @@ import { createWidget, Widget } from 'discourse/widgets/widget';
 //import 'discourse/widgets/header' as Header;
 import { h } from 'virtual-dom';
 import TopicView from 'discourse/views/topic';
+import TopicRoute from 'discourse/routes/topic';
 
 
 
@@ -106,9 +107,18 @@ export default {
       menu_bar.scheduleRerender();
     }
     
-    TopicView.reopen({
-      osfUpdateProjectBar: updateProjectBar.observes('topic.title')
-    });
+    var _activate = TopicRoute.activate;
+    
+    TopicRoute.reopen({
+      activate() {
+        _activate();
+        updateProjectBar();
+      }
+    })
+    
+    //TopicView.reopen({
+    //  osfUpdateProjectBar: updateProjectBar.observes('topic.title')
+    //});
     
     //`
     //
