@@ -62,7 +62,7 @@ export default {
               'data-osf-target': `${base_disc_url}/groups/${osf_pb_st.getState().title}`
             }, "Forum"),
             h('li#wiki', {
-              'data-osf-target': `${base_disc_url}/${osf_pb_st.getState().title}`
+              'data-osf-target': `${base_disc_url}/${osf_pb_st.getState().title}/wiki`
             }, "Wiki"),
             h('li#analytics', {
               'data-osf-target': `${base_disc_url}/${osf_pb_st.getState().title}/analytics`
