@@ -110,7 +110,8 @@ export default {
     var _activate = TopicRoute.activate;
     
     TopicRoute.reopen({
-      activate() {
+      activate: function() {
+        debugger;
         _activate();
         updateProjectBar();
       }
