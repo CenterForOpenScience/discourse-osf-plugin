@@ -103,7 +103,7 @@ export default {
         return current_state;
       })());
       console.log(menu_bar);
-      menu_bar.rerenderResult();
+      menu_bar.scheduleRerender();
     }
     
     TopicView.reopen({
