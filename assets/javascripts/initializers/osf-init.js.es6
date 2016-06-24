@@ -66,16 +66,16 @@ export default {
             }, "Wiki"),
             h('li#analytics', {
               'data-osf-target': `${base_disc_url}/${osf_pb_st.getState().title}/analytics`
-            }, "Analytics")
+            }, "Analytics"),
             h('li#registrations', {
               'data-osf-target': `${base_disc_url}/${osf_pb_st.getState().title}/registrations`
-            }, "Registrations")
+            }, "Registrations"),
             h('li#forks', {
               'data-osf-target': `${base_disc_url}/${osf_pb_st.getState().title}/forks`
-            }, "Forks")
+            }, "Forks"),
             h('li#contributors', {
               'data-osf-target': `${base_disc_url}/${osf_pb_st.getState().title}/contributors`
-            }, "contributors")
+            }, "contributors"),
             h('li#settings', {
               'data-osf-target': `${base_disc_url}/${osf_pb_st.getState().title}/settings`
             }, "Settings")
