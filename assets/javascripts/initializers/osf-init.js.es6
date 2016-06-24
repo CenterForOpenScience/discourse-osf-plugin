@@ -110,6 +110,7 @@ export default {
     
     
     var _activate = TopicRoute.proto().activate;
+    var _actions_didTransition = TopicRoute.proto().actions.didTransition
     console.log(TopicRoute)
     console.log(TopicRoute.prototype)
     console.log(TopicRoute.proto())
@@ -121,9 +122,15 @@ export default {
         _activate.bind(this)();
         //createProjectBar.bind(this)();
       },
-      onTopicChange: function() {
-        updateProjectBar();
-      }.on('didTransition')
+      actions: {
+        didTransition: function() {
+          console.log('didTransition')
+          _actions_didTransition.bind(this)()
+        }
+      }
+      //onTopicChange: function() {
+      //  updateProjectBar();
+      //}.on('didTransition')
     });
     
     //TopicView.reopen({
