@@ -123,7 +123,7 @@ export default {
       },
       onTopicChange: function() {
         updateProjectBar();
-      }.observes('model')
+      }.on('didTransition')
     });
     
     //TopicView.reopen({
