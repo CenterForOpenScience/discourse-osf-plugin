@@ -111,7 +111,7 @@ export default {
     //console.log(_activate);
     // Override literally
     TopicRoute.reopen({
-      activate: function() {
+      activate() {
         this._super();
         isTransitioning = false;
         const topic = this.modelFor('topic');
