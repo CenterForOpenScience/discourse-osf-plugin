@@ -107,7 +107,7 @@ export default {
     }
     
     TopicView.reopen({
-      osfUpdateProjectBar: updateProjectBar.observes('topic')
+      osfUpdateProjectBar: updateProjectBar.observes('topic.title')
     });
     
     //`
