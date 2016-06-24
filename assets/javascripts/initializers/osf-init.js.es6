@@ -118,6 +118,7 @@ export default {
     TopicRoute.reopen({
       activate: function() {
         console.log('creating project bar')
+        _activate.bind(this)();
         //createProjectBar.bind(this)();
       },
       onTopicChange: function() {
