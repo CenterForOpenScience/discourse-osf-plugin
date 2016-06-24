@@ -116,14 +116,14 @@ export default {
     console.log(TopicRoute.proto().activate)    
     console.log(_activate);
     TopicRoute.reopen({
-      activate() {
+      activate: function() {
         console.log('creating project bar')
         //createProjectBar.bind(this)();
       },
-      _updateProjectBar() {
+      onTopicChange: function() {
         updateProjectBar();
       }.on('didTransition')
-    })
+    });
     
     //TopicView.reopen({
     //  osfUpdateProjectBar: updateProjectBar.observes('topic.title')
