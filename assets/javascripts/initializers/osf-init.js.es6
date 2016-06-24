@@ -96,7 +96,7 @@ export default {
     });
     
     function updateProjectBar() {
-      var title = this.get('topic.title')
+      var title = this.currentModel.title
       console.log(title);
       var new_state = osf_pb_st.setState((function() {
         var current_state = osf_pb_st.getState();
