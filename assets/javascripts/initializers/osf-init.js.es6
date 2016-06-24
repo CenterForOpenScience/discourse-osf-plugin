@@ -107,6 +107,8 @@ export default {
       menu_bar.scheduleRerender();
     }
     
+    
+    
     var _activate = TopicRoute.proto().activate;
     console.log(TopicRoute)
     console.log(TopicRoute.prototype)
@@ -115,11 +117,12 @@ export default {
     console.log(_activate);
     TopicRoute.reopen({
       activate() {
-        console.log(this)
-        _activate.bind(this)();
-        updateProjectBar.bind(this)();
-        
-      }
+        console.log('creating project bar')
+        //createProjectBar.bind(this)();
+      },
+      _updateProjectBar() {
+        updateProjectBar();
+      }.on('didTransition')
     })
     
     //TopicView.reopen({
