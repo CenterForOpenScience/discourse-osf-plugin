@@ -107,16 +107,11 @@ export default {
       menu_bar.scheduleRerender();
     }
     
-    //var _activate = TopicRoute.activate;
-    //console.log(_activate);
-    // Override literally
+    var _activate = TopicRoute.prototype.activate;
+    console.log(_activate);
     TopicRoute.reopen({
       activate() {
-        this._super();
-        isTransitioning = false;
-        const topic = this.modelFor('topic');
-        this.session.set('lastTopicIdViewed', parseInt(topic.get('id'), 10));
-        updateProjectBar();
+        _activate();
       }
     })
     
