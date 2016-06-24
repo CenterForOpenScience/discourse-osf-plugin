@@ -88,12 +88,7 @@ export default {
     
     var menu_bar;
     
-    withPluginApi('0.1', api => {
-      api.decorateWidget('header:after', dh => {
-        menu_bar = dh.attach('projectmenu');
-        return menu_bar
-      })
-    });
+
     
     function updateProjectBar() {
       var title = this.currentModel.title
@@ -119,6 +114,12 @@ export default {
       activate: function() {
         console.log('creating project bar')
         _activate.bind(this)();
+        withPluginApi('0.1', api => {
+          api.decorateWidget('header:after', dh => {
+            menu_bar = dh.attach('projectmenu');
+            return menu_bar;
+          })
+        });
         //createProjectBar.bind(this)();
       },
       actions: {
