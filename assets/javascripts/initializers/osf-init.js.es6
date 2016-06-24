@@ -110,7 +110,6 @@ export default {
     
     
     var _activate = TopicRoute.proto().activate;
-    var _actions_didTransition = TopicRoute.proto().actions.didTransition
     console.log(TopicRoute)
     console.log(TopicRoute.prototype)
     console.log(TopicRoute.proto())
@@ -125,7 +124,8 @@ export default {
       actions: {
         didTransition: function() {
           console.log('didTransition')
-          _actions_didTransition.bind(this)()
+          this.controllerFor("topic")._showFooter();
+          return true;
         }
       }
       //onTopicChange: function() {
