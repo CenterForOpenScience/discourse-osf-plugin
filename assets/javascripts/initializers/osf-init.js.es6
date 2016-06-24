@@ -125,7 +125,7 @@ export default {
         didTransition: function() {
           console.log('didTransition')
           this.controllerFor("topic")._showFooter();
-          updateProjectBar()
+          updateProjectBar.bind(this)()
           return true;
         }
       }
