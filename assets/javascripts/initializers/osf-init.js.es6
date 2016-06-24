@@ -115,7 +115,10 @@ export default {
     console.log(_activate);
     TopicRoute.reopen({
       activate() {
+        
         _activate.bind(this)();
+        updateProjectBar();
+        
       }
     })
     
