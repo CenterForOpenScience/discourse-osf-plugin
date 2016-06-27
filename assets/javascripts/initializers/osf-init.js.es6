@@ -119,7 +119,7 @@ export default {
       },
       
       deactivate: function() {
-        var ph = document.getElementById('#project_header')
+        var ph = document.getElementById('project_header')
         _deactivate.bind(this)();
         ph.parentNode.remove(ph);
       },
