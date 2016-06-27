@@ -124,14 +124,15 @@ export default {
         ph.parentNode.remove(ph);
       },
       
-      actions: {
-        didTransition: function() {
+      //actions: {
+        //didTransition: function() {
+        osfModelChanged: function() {  
           console.log('didTransition')
           this.controllerFor("topic")._showFooter();
           updateProjectBar.bind(this)()
           return true;
-        }
-      }
+        }.observes('controller.content')
+      //}
       //onTopicChange: function() {
       //  updateProjectBar();
       //}.on('didTransition')
