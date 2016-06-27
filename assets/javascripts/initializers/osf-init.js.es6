@@ -100,12 +100,7 @@ export default {
       menu_bar.scheduleRerender();
     }
     
-    withPluginApi('0.1', api => {
-      api.decorateWidget('header:after', dh => {
-        menu_bar = dh.attach('projectmenu');
-        return menu_bar;
-      })
-    });
+
     
     var _activate = TopicRoute.proto().activate;
     var _deactivate = TopicRoute.proto().deactivate;
@@ -114,7 +109,12 @@ export default {
       activate: function() {
         console.log('creating project bar')
         _activate.bind(this)();
-
+        withPluginApi('0.1', api => {
+          api.decorateWidget('header:after', dh => {
+            menu_bar = dh.attach('projectmenu');
+            return menu_bar;
+          })
+        });
         //createProjectBar.bind(this)();
       },
       
