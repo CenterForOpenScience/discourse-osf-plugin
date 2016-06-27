@@ -89,7 +89,8 @@ export default {
     var menu_bar;
     
     function updateProjectBar() {
-      var title = this.currentModel.title
+      //var title = this.currentModel.title
+      var title = this.modelFor('topic').title;
       console.log(title);
       var new_state = osf_pb_st.setState((function() {
         var current_state = osf_pb_st.getState();
