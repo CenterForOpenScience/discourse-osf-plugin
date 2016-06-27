@@ -115,6 +115,7 @@ export default {
             return menu_bar;
           })
         });
+        updateProjectBar.bind(this)()
         //createProjectBar.bind(this)();
       },
       
@@ -124,15 +125,14 @@ export default {
         ph.parentNode.remove(ph);
       },
       
-      //actions: {
-        //didTransition: function() {
-        osfModelChanged: function() {  
+      actions: {
+        didTransition: function() {
           console.log('didTransition')
           this.controllerFor("topic")._showFooter();
           updateProjectBar.bind(this)()
           return true;
-        }.observes('controller.content')
-      //}
+        }
+      }
       //onTopicChange: function() {
       //  updateProjectBar();
       //}.on('didTransition')
