@@ -142,7 +142,7 @@ export default {
     });
     
     TopicView.reopen({
-      osfUpdateProjectBar: updateProjectBar.bind(this).observes('controller.model')
+      osfUpdateProjectBar: updateProjectBar.observes('controller.model')
     });
     
     //`
