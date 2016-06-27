@@ -90,7 +90,7 @@ export default {
     
     function updateProjectBar() {
       //var title = this.currentModel.title
-      var title = this.modelFor('topic').title;
+      var title = this.get('topic.title');
       console.log(title);
       var new_state = osf_pb_st.setState((function() {
         var current_state = osf_pb_st.getState();
@@ -114,7 +114,7 @@ export default {
         withPluginApi('0.1', api => {
           api.decorateWidget('header:after', dh => {
             menu_bar = dh.attach('projectmenu');
-            updateProjectBar.bind(this)()
+
             return menu_bar;
           })
         });
@@ -128,22 +128,22 @@ export default {
         ph.parentNode.remove(ph);
       },
       
-      actions: {
-        didTransition: function() {
-          console.log('didTransition')
-          this.controllerFor("topic")._showFooter();
-          updateProjectBar.bind(this)()
-          return true;
-        }
-      }
+      //actions: {
+      //  didTransition: function() {
+      //    console.log('didTransition')
+      //    this.controllerFor("topic")._showFooter();
+      //    updateProjectBar.bind(this)()
+      //    return true;
+      //  }
+      //}
       //onTopicChange: function() {
       //  updateProjectBar();
       //}.on('didTransition')
     });
     
-    //TopicView.reopen({
-    //  osfUpdateProjectBar: updateProjectBar.observes('topic.title')
-    //});
+    TopicView.reopen({
+      osfUpdateProjectBar: updateProjectBar.bind(this).observes('controller.model')
+    });
     
     //`
     //
