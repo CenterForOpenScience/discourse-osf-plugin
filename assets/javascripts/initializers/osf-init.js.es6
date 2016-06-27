@@ -114,10 +114,11 @@ export default {
         withPluginApi('0.1', api => {
           api.decorateWidget('header:after', dh => {
             menu_bar = dh.attach('projectmenu');
+            updateProjectBar.bind(this)()
             return menu_bar;
           })
         });
-        updateProjectBar.bind(this)()
+
         //createProjectBar.bind(this)();
       },
       
