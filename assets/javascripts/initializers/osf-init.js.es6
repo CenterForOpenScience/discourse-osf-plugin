@@ -95,9 +95,9 @@ export default {
       var new_state = osf_pb_st.setState((function() {
         var current_state = osf_pb_st.getState();
         current_state.title = title;
-        menu_bar.scheduleRerender();
         return current_state;
       })());
+      menu_bar.scheduleRerender();
       console.log(menu_bar);
       
     }
