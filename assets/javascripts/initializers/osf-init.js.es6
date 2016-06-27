@@ -108,11 +108,8 @@ export default {
     });
     
     var _activate = TopicRoute.proto().activate;
-    console.log(TopicRoute)
-    console.log(TopicRoute.prototype)
-    console.log(TopicRoute.proto())
-    console.log(TopicRoute.proto().activate)    
-    console.log(_activate);
+    var _deactivate = TopicRoute.proto().deactivate;
+
     TopicRoute.reopen({
       activate: function() {
         console.log('creating project bar')
@@ -120,6 +117,13 @@ export default {
 
         //createProjectBar.bind(this)();
       },
+      
+      deactivate: function() {
+        var ph = document.getElementById('#project_header')
+        _deactivate.bind(this)();
+        ph.parentNode.remove(ph);
+      },
+      
       actions: {
         didTransition: function() {
           console.log('didTransition')
