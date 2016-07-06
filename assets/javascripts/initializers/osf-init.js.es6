@@ -20,7 +20,7 @@ export default {
 
                 var route = this.container.lookup('controller:Application').currentPath;
 
-                if (route == 'topic') {
+                if (route.startsWith('topic')) {
                     var topicModel = this.container.lookup('controller:topic').model;
                     title = topicModel.parent_names[0];
                     guid = topicModel.parent_guids[0];
