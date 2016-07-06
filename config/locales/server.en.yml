@@ -1,5 +1,4 @@
-# below-sitemap
-
 en:
   site_settings:
-    osf_widgets_active: "Enable Open Science Framework integration with Discourse."
+    osf_plugin_active: "Enable Open Science Framework integration with Discourse."
+    osf_domain: "Domain of the OSF instance associated with Discourse."

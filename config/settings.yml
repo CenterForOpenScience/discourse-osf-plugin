@@ -1,6 +1,7 @@
-# osf-widgets
-
 plugins:
-  osf_widgets_active:
+  osf_plugin_active:
     default: true
+    client: true
+  osf_domain:
+    default: http://localhost:5000
     client: true

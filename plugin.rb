@@ -1,6 +1,6 @@
-# naem: below-sitemap
-# about: plugin to insert content into menu
+# name: discourse-osf-plugin
+# about: plugin to insert OSF specific customizations
 # version: 0.1
-# author: me
+# author: Joshua Bird, Acshi Haggenmiller
 
-#register_asset "assets/javascripts/discourse/services/osf_service.js.es6"
+enabled_site_setting :osf_plugin_active
