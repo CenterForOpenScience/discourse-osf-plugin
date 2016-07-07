@@ -3,6 +3,9 @@
 import { withPluginApi } from 'discourse/lib/plugin-api';
 import { createWidget, Widget } from 'discourse/widgets/widget';
 import { h } from 'virtual-dom';
+import ShareButton from 'discourse/views/share-button';
+import PostMenu from 'discourse/widgets/post-menu';
+import MountWidget from 'discourse/components/mount-widget';
 
 export default {
     name: "apply-osf",
@@ -22,9 +25,11 @@ export default {
 
                 if (route.startsWith('topic')) {
                     var topicModel = this.container.lookup('controller:topic').model;
-                    title = topicModel.parent_names[0];
-                    guid = topicModel.parent_guids[0];
-                    parent_guid = topicModel.parent_guids[1];
+                    if (topicModel.parent_names) {
+                        title = topicModel.parent_names[0];
+                        guid = topicModel.parent_guids[0];
+                        parent_guid = topicModel.parent_guids[1];
+                    }
                 } else if (route == 'projects.show') {
                     var projectTopicList = this.container.lookup('controller:projects.show').list.topic_list;
                     title = projectTopicList.parent_names[0];
@@ -93,7 +98,9 @@ export default {
         });
 
         var projectHeader;
-        withPluginApi('0.1', api => {
+        var api;
+        withPluginApi('0.1', _api => {
+            api = _api;
             api.decorateWidget('header:after', header => {
                 projectHeader = header.attach('osf-project-menu');
                 return projectHeader;
@@ -101,6 +108,20 @@ export default {
             api.onPageChange((url, title) => {
                 projectHeader.scheduleRerender();
             });
+        });
+
+        MountWidget.reopen({
+            afterRender() {
+                var topicModel = this.container.lookup('controller:topic').model;
+                if (!topicModel) {
+                    return;
+                }
+                if (topicModel.project_is_public) {
+                    $('button.share').removeClass('private');
+                } else {
+                    $('button.share').addClass('private');
+                }
+            }
         });
     }
 };
