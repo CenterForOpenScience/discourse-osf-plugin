@@ -5,3 +5,6 @@ plugins:
   osf_domain:
     default: http://localhost:5000
     client: true
+  mfr_domain:
+    default: http://localhost:7778
+    client: true
