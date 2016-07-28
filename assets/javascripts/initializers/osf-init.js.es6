@@ -30,7 +30,7 @@ export default {
                         guid = topicModel.parent_guids[0];
                         parent_guid = topicModel.parent_guids[1];
                     }
-                } else if (route == 'projects.show') {
+                } else if (route.startsWith('projects.')) {
                     var projectTopicList = this.container.lookup('controller:projects.show').list.topic_list;
                     title = projectTopicList.parent_names[0];
                     guid = projectTopicList.parent_guids[0];
@@ -59,7 +59,7 @@ export default {
                         ),
                         h('li',
                             h('a.project-forum', {
-                                'href': `${base_disc_url}/projects/${guid}`
+                                'href': `${base_disc_url}/forum/${guid}`
                             }, "Forum")
                         ),
                         h('li',
@@ -107,6 +107,12 @@ export default {
             });
             api.onPageChange((url, title) => {
                 projectHeader.scheduleRerender();
+
+                if (url.startsWith('/t') || url.startsWith('/forum')) {
+                    $('#main-outlet').addClass('has-osf-bar');
+                } else {
+                    $('#main-outlet').removeClass('has-osf-bar');
+                }
             });
         });
 

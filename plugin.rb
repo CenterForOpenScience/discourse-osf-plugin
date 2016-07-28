@@ -8,7 +8,9 @@ enabled_site_setting :osf_plugin_active
 after_initialize do
     require_dependency 'application_controller'
 
-    DiscoursePluginRegistry.register_glob(File.expand_path(File.dirname(__FILE__) + '/views'), 'html.erb')
+    # Allow our comments.html.erb or related files override the defaults
+
+    #DiscoursePluginRegistry.register_glob(File.expand_path(File.dirname(__FILE__) + '/views'), 'html.erb')
 
     ApplicationController.class_eval do
         before_filter :prepend_view_paths
