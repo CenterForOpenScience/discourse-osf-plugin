@@ -121,7 +121,9 @@ export default {
             var topicModel = Discourse.__container__.lookup('controller:topic').model;
             if (topicModel) {
                 _.each(topicModel.get('postStream').posts, post => {
-                    usernamesToNames[post.reply_to_user.username] = post.reply_to_user.name;
+                    if (post.reply_to_user) {
+                        usernamesToNames[post.reply_to_user.username] = post.reply_to_user.name;
+                    }
                 });
             }
 
