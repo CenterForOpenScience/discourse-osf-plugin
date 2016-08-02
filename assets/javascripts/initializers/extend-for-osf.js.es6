@@ -7,6 +7,9 @@ import ShareButton from 'discourse/views/share-button';
 import PostMenu from 'discourse/widgets/post-menu';
 import MountWidget from 'discourse/components/mount-widget';
 import ComposerModel from 'discourse/models/composer';
+import ComposerController from 'discourse/controllers/composer';
+import { wantsNewWindow } from 'discourse/lib/intercept-click';
+import UserCardView from 'discourse/views/user-card';
 
 export default {
     name: "extend-for-osf",
@@ -102,12 +105,16 @@ export default {
             }
         });
 
-        var replaceAvatarTooltips = function() {
+        var replaceUsernames = function() {
             // We want to make all these image tags have tooltips with the name, not the username
-            // The first selector for topic list pages, the second for topic pages
-            var elems = document.querySelectorAll('.posters a img, a.reply-to-tab img');
+            // We specify just the ones we want because we don't want to mess with the ones
+            // that show up for the autocorrect, which should show both username and full name
+            var avatarElems = document.querySelectorAll('#current-user img, .topic-avatar img, .reply-to img, .reply-to-tab img, .posters img, .topic-map img');
 
             var usernamesToNames = {};
+
+            var currentUser = Discourse.__container__.lookup('component:siteHeader').currentUser;
+            usernamesToNames[currentUser.username] = currentUser.name;
 
             var topicsModel = Discourse.__container__.lookup('controller:discovery.topics').model;
             if (topicsModel) {
@@ -116,36 +123,57 @@ export default {
                         usernamesToNames[poster.user.username] = poster.user.name;
                     });
                 });
+                _.each(topicsModel.topic_list.contributors, contributor => {
+                    usernamesToNames[contributor.username] = contributor.name;
+                });
             }
 
             var topicModel = Discourse.__container__.lookup('controller:topic').model;
             if (topicModel) {
                 _.each(topicModel.get('postStream').posts, post => {
+                    usernamesToNames[post.username] = post.name;
                     if (post.reply_to_user) {
                         usernamesToNames[post.reply_to_user.username] = post.reply_to_user.name;
                     }
                 });
+                _.each(topicModel.contributors, contributor => {
+                    usernamesToNames[contributor.username] = contributor.name;
+                });
             }
 
-            _.each(elems, elem => {
-                var username = elem.title.split(' ')[0];
-                if (usernamesToNames[username]) {
-                    elem.title = elem.title.replace(username, usernamesToNames[username]);
-                    // On the topic page, a span with the username also appears right afterward
-                    // I'm guessing it is for accessability.
-                    var sibling = elem.nextElementSibling;
-                    if (sibling && sibling.textContent == username) {
-                        sibling.textContent = usernamesToNames[username];
+            _.each(avatarElems, elem => {
+                if (elem.title.length === 0) {
+                    // For the composer, where the username text follows and is not in the title.
+                    let sibling = elem.nextSibling;
+                    if (sibling) {
+                        let username = sibling.textContent.trim().split(' ')[0];
+                        let name = usernamesToNames[username];
+                        if (name) {
+                            sibling.textContent = sibling.textContent.replace(username, name);
+                        }
+                    }
+                } else {
+                    let username = elem.title.split(' ')[0];
+                    let name = usernamesToNames[username];
+                    if (name) {
+                        elem.title = elem.title.replace(username, name);
+                        // On the topic page, a span with the username also appears right afterward
+                        let sibling = elem.nextElementSibling;
+                        if (sibling && sibling.textContent == username) {
+                            sibling.textContent = name;
+                        }
                     }
                 }
             });
 
-            // Finally for the current user in the site header
-            var currentUser = Discourse.__container__.lookup('component:siteHeader').currentUser;
-            var userAvatar = document.querySelector('#current-user img');
-            if (currentUser && userAvatar) {
-                userAvatar.title = userAvatar.title.replace(currentUser.username, currentUser.name);
-            }
+            // Show full names in @mentions
+            _.each(document.querySelectorAll('a.mention, span.mention'), elem => {
+                var username = elem.textContent.substr(1);
+                var name = usernamesToNames[username];
+                if (name) {
+                    elem.textContent = '@' + name;
+                }
+            });
         };
 
         var projectHeader;
@@ -165,12 +193,44 @@ export default {
                     $('#main-outlet').removeClass('has-osf-bar');
                 }
 
-                replaceAvatarTooltips();
+                replaceUsernames();
             });
+        });
+
+        // Because we modify @mentions to show full names, we also have to modify the click handler
+        UserCardView.reopen({
+            _setup: function() {
+                this._super();
+
+                const clickMention = 'click.discourse-user-mention';
+                const expand = (username, $target) => {
+                  const postId = $target.parents('article').data('post-id'),
+                    user = this.get('controller').show(username, postId, $target[0]);
+                  if (user !== undefined) {
+                    user.then( () => this._willShow($target) ).catch( () => this._hide() );
+                  } else {
+                    this._hide();
+                  }
+                  return false;
+                };
+
+                // Replace the default mention click handler with one that
+                // uses the href to find the username instead of the display text
+                $('#main-outlet').unbind(clickMention);
+                $('#main-outlet').on(clickMention, 'a.mention', (e) => {
+                    if (wantsNewWindow(e)) { return; }
+
+                    const $target = $(e.target);
+                    const username = $target.attr('href').replace('/users/', '');
+                    return expand(username, $target);
+                });
+            }.on('didInsertElement')
         });
 
         MountWidget.reopen({
             afterRender() {
+                this._super();
+
                 var topicModel = this.container.lookup('controller:topic').model;
                 if (!topicModel) {
                     return;
@@ -181,24 +241,20 @@ export default {
                     $('button.share').addClass('private');
                 }
 
-                replaceAvatarTooltips();
+                replaceUsernames();
             }
         });
 
-        // Have the reply-to show the name and not the guid "username".
-        ComposerModel.reopen({
-            actionTitle: function() {
-                var html = this._super();
-                var post = this.get('post');
-                if (post) {
-                    // replace the username where it is not in a url.
-                    html = html.replace(new RegExp('([^\/])' + post.username), '$1' + post.name);
-                    if (post.reply_to_user) {
-                        html = html.replace(new RegExp('([^\/])' + post.reply_to_user.username), '$1' + post.reply_to_user.name);
-                    }
+        ComposerController.reopen({
+            actions: {
+                afterRefresh: function($preview) {
+                    this._super();
+                    // Schedule it so that it runs after the mention span/a tag replacement
+                    Ember.run.scheduleOnce('afterRender', function() {
+                        replaceUsernames();
+                    });
                 }
-                return html;
-            }.property(),
+            }
         });
     }
 };
