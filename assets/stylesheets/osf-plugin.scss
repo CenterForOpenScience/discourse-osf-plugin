@@ -1,5 +1,5 @@
-a {
-    font-family: 'Open Sans','Helvetica Neue', sans-serif;
+body, body input, body button, body select, body textarea {
+    font-family: 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
 section.ember-application {
@@ -21,7 +21,6 @@ header .title a:after {
     @media (min-width: 768px ) {
         content: "Open Science Framework";
     }
-    font-family: 'Open Sans', 'Helvetica Neue', sans-serif;
     vertical-align: middle;
     color: white;
     -webkit-font-smoothing: antialiased;
@@ -110,9 +109,7 @@ header {
 
     font-weight: normal;
     content: title;
-    font-family: 'Open Sans', 'Helvetica Neue', sans-serif;
     vertical-align: middle;
-    -webkit-font-smoothing: antialiased;
 }
 
 .extra-info-wrapper {
@@ -212,6 +209,8 @@ header {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
+
+    -webkit-font-smoothing: antialiased;
 }
 
 #project-header > ul > li {
@@ -229,10 +228,8 @@ header {
     display: block;
 
     color: #337ab7;
-    font-family: 'Open Sans', 'Helvetica Neue', sans-serif;
     font-size: 15px;
     line-height: 20px;
-    -webkit-font-smoothing: antialiased;
 
     padding-top: 12px;
     padding-bottom: 12px;

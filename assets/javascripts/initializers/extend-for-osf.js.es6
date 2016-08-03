@@ -10,6 +10,7 @@ import ComposerModel from 'discourse/models/composer';
 import ComposerController from 'discourse/controllers/composer';
 import { wantsNewWindow } from 'discourse/lib/intercept-click';
 import UserCardView from 'discourse/views/user-card';
+import TopicListModel from 'discourse/models/topic-list';
 
 export default {
     name: "extend-for-osf",
@@ -248,12 +249,20 @@ export default {
         ComposerController.reopen({
             actions: {
                 afterRefresh: function($preview) {
-                    this._super();
+                    this._super($preview);
                     // Schedule it so that it runs after the mention span/a tag replacement
                     Ember.run.scheduleOnce('afterRender', function() {
                         replaceUsernames();
                     });
                 }
+            }
+        });
+
+        // Grab a hook inside of the runloop for processing topic reloads
+        TopicListModel.reopen({
+            forEachNew(topics, callback) {
+                this._super(topics, callback);
+                Ember.run.scheduleOnce('afterRender', replaceUsernames);
             }
         });
     }
