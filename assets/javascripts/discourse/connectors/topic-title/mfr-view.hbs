@@ -20,7 +20,7 @@ var observeDOM = (function(){
 observeDOM(document.body, function() {
     var topic_post = document.querySelector('.topic-post article#post_1 .cooked');
     if (!topic_post) return;
-    if (document.getElementById("mfrButton")) return;
+    if (document.getElementById('mfrButton')) return;
 
     var mfrDomain = Discourse.SiteSettings.mfr_domain;
     var osfDomain = Discourse.SiteSettings.osf_domain;
@@ -31,7 +31,7 @@ observeDOM(document.body, function() {
         var guid = match[1];
 
         var mfrButton = document.createElement('button');
-        mfrButton.id = "mfrButton";
+        mfrButton.id = 'mfrButton';
         mfrButton.appendChild(document.createTextNode('Show File View'));
         topic_post.appendChild(mfrButton);
 
@@ -39,7 +39,7 @@ observeDOM(document.body, function() {
             var mfrJs = document.createElement('script');
             mfrJs.src = mfrDomain + '/static/js/mfr.js';
             mfrJs.onload = function() {
-                var mfrRender = new mfr.Render("mfrIframe", mfrDomain + "/render?url=" + osfDomain + '/' + guid + "/?action=download%26mode=render");
+                var mfrRender = new mfr.Render('mfrIframe', mfrDomain + '/render?url=' + osfDomain + '/' + guid + '/?action=download%26mode=render');
                 mfrButton.style.display = 'None';
             };
             document.head.appendChild(mfrJs);
@@ -47,8 +47,8 @@ observeDOM(document.body, function() {
 
         mfrButton.onclick = function() {
             var mfrDiv = document.createElement('div');
-            mfrDiv.id = "mfrIframe";
-            mfrDiv.className = "mfr mfr-file";
+            mfrDiv.id = 'mfrIframe';
+            mfrDiv.className = 'mfr mfr-file';
             topic_post.appendChild(mfrDiv);
 
             var mfrCss = document.createElement('link');
