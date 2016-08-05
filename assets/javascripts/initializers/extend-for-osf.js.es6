@@ -11,6 +11,7 @@ import ComposerController from 'discourse/controllers/composer';
 import { wantsNewWindow } from 'discourse/lib/intercept-click';
 import UserCardView from 'discourse/views/user-card';
 import TopicListModel from 'discourse/models/topic-list';
+import DiscoveryTopics from 'discourse/controllers/discovery/topics';
 
 export default {
     name: "extend-for-osf",
@@ -39,8 +40,12 @@ export default {
                         guid = topicModel.parent_guids[0];
                         parent_guid = topicModel.parent_guids[1];
                     }
-                } else if (route.startsWith('projects.')) {
-                    var projectTopicList = this.container.lookup('controller:projects.show').list.topic_list;
+                } else if (route.startsWith('projects.show') || route.startsWith('projects.top')) {
+                    var projectList = this.container.lookup('controller:projects.show').list;
+                    if (!projectList) {
+                        return '';
+                    }
+                    var projectTopicList = projectList.topic_list;
                     title = projectTopicList.parent_names[0];
                     guid = projectTopicList.parent_guids[0];
                     parent_guid = projectTopicList.parent_guids[1];
@@ -123,6 +128,9 @@ export default {
                     _.each(topic.posters, poster => {
                         usernamesToNames[poster.user.username] = poster.user.name;
                     });
+                    _.each(topic.excerpt_mentioned_users, user => {
+                        usernamesToNames[user.username] = user.name;
+                    });
                 });
                 _.each(topicsModel.topic_list.contributors, contributor => {
                     usernamesToNames[contributor.username] = contributor.name;
@@ -188,7 +196,7 @@ export default {
             api.onPageChange((url, title) => {
                 projectHeader.scheduleRerender();
 
-                if (url.startsWith('/t') || url.startsWith('/forum')) {
+                if (url.startsWith('/t/') || url.startsWith('/forum/')) {
                     $('#main-outlet').addClass('has-osf-bar');
                 } else {
                     $('#main-outlet').removeClass('has-osf-bar');
@@ -258,11 +266,14 @@ export default {
             }
         });
 
-        // Grab a hook inside of the runloop for processing topic reloads
-        TopicListModel.reopen({
-            forEachNew(topics, callback) {
-                this._super(topics, callback);
-                Ember.run.scheduleOnce('afterRender', replaceUsernames);
+        DiscoveryTopics.reopen({
+            actions: {
+                // This schedules a rerender, so we need to also schedule
+                // A replacing of the users, since the page doesn't reload
+                toggleBulkSelect() {
+                    this._super();
+                    Ember.run.scheduleOnce('afterRender', replaceUsernames);
+                },
             }
         });
     }

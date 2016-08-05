@@ -13,13 +13,10 @@ register_custom_html(top:
 after_initialize do
     require_dependency 'application_controller'
 
-    # Allow our comments.html.erb or related files override the defaults
-
-    #DiscoursePluginRegistry.register_glob(File.expand_path(File.dirname(__FILE__) + '/views'), 'html.erb')
-
     ApplicationController.class_eval do
         before_filter :prepend_view_paths
 
+        # Allow our comments.html.erb or related files override the defaults
         def prepend_view_paths
             prepend_view_path "plugins/discourse-osf-plugin/views"
         end
