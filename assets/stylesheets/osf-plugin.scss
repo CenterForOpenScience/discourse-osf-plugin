@@ -249,7 +249,7 @@ header {
 }
 
 #project-header > ul > li.header-offset {
-    min-width: 29px;
+    min-width: 15px;
     min-height: 1px;
 }
 
@@ -265,9 +265,9 @@ header {
     text-overflow: ellipsis;
     overflow: hidden;
 
-    max-width: 190px;
+    max-width: 170px;
     @media (min-width: 864px) {
-        max-width: 210px;
+        max-width: 190px;
     }
     @media (min-width: 992px) {
         max-width: 300px;

@@ -23,7 +23,14 @@ observeDOM(document.body, function() {
     if (document.getElementById('mfrButton')) return;
 
     var mfrDomain = Discourse.SiteSettings.mfr_domain;
+    if (mfrDomain.endsWith('/')) {
+        mfrDomain = mfrDomain.slice(0, -1);
+    }
+
     var osfDomain = Discourse.SiteSettings.osf_domain;
+    if (osfDomain.endsWith('/')) {
+        osfDomain = osfDomain.slice(0, -1);
+    }
 
     var reg = new RegExp('\:\/\/(?:osf|local)[^\/]*\/([a-z0-9]*)\/?');
     var match = reg.exec(topic_post.textContent);

@@ -236,6 +236,7 @@ export default {
             }.on('didInsertElement')
         });
 
+        // After "mounting"/rendering of the topic/poststream "widget"
         MountWidget.reopen({
             afterRender() {
                 this._super();
@@ -244,6 +245,7 @@ export default {
                 if (!topicModel) {
                     return;
                 }
+                // Don't allow sharing posts in private projects
                 if (topicModel.project_is_public) {
                     $('button.share').removeClass('private');
                 } else {
@@ -259,9 +261,7 @@ export default {
                 afterRefresh: function($preview) {
                     this._super($preview);
                     // Schedule it so that it runs after the mention span/a tag replacement
-                    Ember.run.scheduleOnce('afterRender', function() {
-                        replaceUsernames();
-                    });
+                    Ember.run.scheduleOnce('afterRender', replaceUsernames);
                 }
             }
         });
