@@ -3,6 +3,7 @@
 import { withPluginApi } from 'discourse/lib/plugin-api';
 import { createWidget, Widget } from 'discourse/widgets/widget';
 import { h } from 'virtual-dom';
+import VirtualDom from 'virtual-dom';
 import ShareButton from 'discourse/views/share-button';
 import PostMenu from 'discourse/widgets/post-menu';
 import MountWidget from 'discourse/components/mount-widget';
@@ -16,100 +17,113 @@ import DiscoveryTopics from 'discourse/controllers/discovery/topics';
 export default {
     name: "extend-for-osf",
     initialize() {
-        createWidget('osf-project-menu', {
-            tagName: 'div',
+        function renderOsfProjectMenu() {
+            var container = Discourse.__container__;
 
-            html(attrs) {
-                var base_osf_url = Discourse.SiteSettings.osf_domain;
-                if (base_osf_url.endsWith('/')) {
-                    base_osf_url = base_osf_url.slice(0, -1);
+            var base_osf_url = Discourse.SiteSettings.osf_domain;
+            if (base_osf_url.endsWith('/')) {
+                base_osf_url = base_osf_url.slice(0, -1);
+            }
+
+            var base_disc_url = window.location.origin;
+
+            var title = '';
+            var guid = '';
+            var parent_guid = '';
+
+            var route = container.lookup('controller:Application').currentPath;
+
+            if (route.startsWith('topic')) {
+                var topicModel = container.lookup('controller:topic').model;
+                if (topicModel.parent_names) {
+                    title = topicModel.parent_names[0];
+                    guid = topicModel.parent_guids[0];
+                    parent_guid = topicModel.parent_guids[1];
                 }
-
-                var base_disc_url = window.location.origin;
-
-                var title = '';
-                var guid = '';
-                var parent_guid = '';
-
-                var route = this.container.lookup('controller:Application').currentPath;
-
-                if (route.startsWith('topic')) {
-                    var topicModel = this.container.lookup('controller:topic').model;
-                    if (topicModel.parent_names) {
-                        title = topicModel.parent_names[0];
-                        guid = topicModel.parent_guids[0];
-                        parent_guid = topicModel.parent_guids[1];
-                    }
-                } else if (route.startsWith('projects.show') || route.startsWith('projects.top')) {
-                    var projectList = this.container.lookup('controller:projects.show').list;
-                    if (!projectList) {
-                        return '';
-                    }
-                    var projectTopicList = projectList.topic_list;
-                    title = projectTopicList.parent_names[0];
-                    guid = projectTopicList.parent_guids[0];
-                    parent_guid = projectTopicList.parent_guids[1];
-                } else {
+            } else if (route.startsWith('projects.show') || route.startsWith('projects.top')) {
+                var projectList = container.lookup('controller:projects.show').list;
+                if (!projectList) {
                     return '';
                 }
-
-                return h('div#project-header',
-                    h('ul', [
-                        h('li.header-offset'),
-                        parent_guid ? h('li',
-                            h('a.project-parent', {
-                                'href': `${base_osf_url}/${parent_guid}/`
-                            }, h('i.fa.fa-level-down.fa-rotate-180'))
-                        ) : null,
-                        h('li',
-                            h('a.project-name', {
-                                'href': `${base_osf_url}/${guid}/`
-                            }, `${title}`)
-                        ),
-                        h('li',
-                            h('a', {
-                                'href': `${base_osf_url}/${guid}/files`
-                            }, "Files")
-                        ),
-                        h('li',
-                            h('a.project-forum', {
-                                'href': `${base_disc_url}/forum/${guid}`
-                            }, "Forum")
-                        ),
-                        h('li',
-                            h('a', {
-                                'href': `${base_osf_url}/${guid}/wiki`
-                            }, "Wiki")
-                        ),
-                        h('li',
-                            h('a', {
-                                'href': `${base_osf_url}/${guid}/analytics`
-                            }, "Analytics")
-                        ),
-                        h('li',
-                            h('a', {
-                                'href': `${base_osf_url}/${guid}/registrations`
-                            }, "Registrations")
-                        ),
-                        h('li',
-                            h('a', {
-                                'href': `${base_osf_url}/${guid}/forks`
-                            }, "Forks")
-                        ),
-                        h('li',
-                            h('a', {
-                                'href': `${base_osf_url}/${guid}/contributors`
-                            }, "Contributors")
-                        ),
-                        h('li',
-                            h('a', {
-                                'href': `${base_osf_url}/${guid}/settings`
-                            }, "Settings")
-                        )
-                    ])
-                );
+                var projectTopicList = projectList.topic_list;
+                title = projectTopicList.parent_names[0];
+                guid = projectTopicList.parent_guids[0];
+                parent_guid = projectTopicList.parent_guids[1];
             }
-        });
+            if (!title) {
+                return '';
+            }
+
+            return h('nav#projectSubnav.navbar.osf-project-navbar[role=navigation]',
+                    h('div.container', [
+                        h('div.navbar-header', [
+                            h('button.navbar-toggle.collapsed', {'attributes': {
+                                    'data-toggle': 'collapse', 'data-target': '#project-header'
+                                }}, [h('span.sr-only', 'Toggle navigation'), h('span.fa.fa-bars.fa-lg')]
+                            ),
+                            h('a.navbar-brand.visible-xs', {
+                                'href':`/forum/${guid}`
+                            }, 'Project Navigation')
+                        ]),
+                        h('div.collapse.navbar-collapse.project-nav',
+                            h('ul.nav.navbar-nav', [
+                                parent_guid ? h('li',
+                                    h('a.project-parent', {
+                                        'href': `${base_osf_url}/${parent_guid}/`
+                                    }, h('i.fa.fa-level-down.fa-rotate-180'))
+                                ) : null,
+                                h('li',
+                                    h('a.project-name', {
+                                        'href': `${base_osf_url}/${guid}/`
+                                    }, `${title}`)
+                                ),
+                                h('li',
+                                    h('a', {
+                                        'href': `${base_osf_url}/${guid}/files`
+                                    }, "Files")
+                                ),
+                                h('li',
+                                    h('a.project-forum', {
+                                        'href': `${base_disc_url}/forum/${guid}`
+                                    }, "Forum")
+                                ),
+                                h('li',
+                                    h('a', {
+                                        'href': `${base_osf_url}/${guid}/wiki`
+                                    }, "Wiki")
+                                ),
+                                h('li',
+                                    h('a', {
+                                        'href': `${base_osf_url}/${guid}/analytics`
+                                    }, "Analytics")
+                                ),
+                                h('li',
+                                    h('a', {
+                                        'href': `${base_osf_url}/${guid}/registrations`
+                                    }, "Registrations")
+                                ),
+                                h('li',
+                                    h('a', {
+                                        'href': `${base_osf_url}/${guid}/forks`
+                                    }, "Forks")
+                                ),
+                                h('li',
+                                    h('a', {
+                                        'href': `${base_osf_url}/${guid}/contributors`
+                                    }, "Contributors")
+                                ),
+                                h('li',
+                                    h('a', {
+                                        'href': `${base_osf_url}/${guid}/settings`
+                                    }, "Settings")
+                                )
+                            ])
+                        )
+                    ]
+                )
+            );
+
+        }
 
         var replaceUsernames = function() {
             // We want to make all these image tags have tooltips with the name, not the username
@@ -120,7 +134,9 @@ export default {
             var usernamesToNames = {};
 
             var currentUser = Discourse.__container__.lookup('component:siteHeader').currentUser;
-            usernamesToNames[currentUser.username] = currentUser.name;
+            if (currentUser) {
+                usernamesToNames[currentUser.username] = currentUser.name;
+            }
 
             var topicsModel = Discourse.__container__.lookup('controller:discovery.topics').model;
             if (topicsModel) {
@@ -153,7 +169,7 @@ export default {
             _.each(avatarElems, elem => {
                 if (elem.title.length === 0) {
                     // For the composer, where the username text follows and is not in the title.
-                    let sibling = elem.nextSibling;
+                    let sibling = elem.nextElementSibling;
                     if (sibling) {
                         let username = sibling.textContent.trim().split(' ')[0];
                         let name = usernamesToNames[username];
@@ -185,16 +201,36 @@ export default {
             });
         };
 
-        var projectHeader;
+        var projectHeader = null;
+        var headerNode = null;
         var api;
         withPluginApi('0.1', _api => {
             api = _api;
-            api.decorateWidget('header:after', header => {
-                projectHeader = header.attach('osf-project-menu');
-                return projectHeader;
-            });
             api.onPageChange((url, title) => {
-                projectHeader.scheduleRerender();
+                // We do all the work with VirtualDom ourselves so that we can place
+                // the header exactly where we want it.
+                var subnav = document.getElementById('projectSubnav');
+                if (projectHeader) {
+                    var newProjectHeader = renderOsfProjectMenu();
+                    var patches = VirtualDom.diff(projectHeader, newProjectHeader);
+                    headerNode = VirtualDom.patch(headerNode, patches);
+                    projectHeader = newProjectHeader;
+                } else {
+                    projectHeader = renderOsfProjectMenu();
+                    headerNode = VirtualDom.create(projectHeader);
+                    var main = document.getElementById('main-outlet');
+                    main.parentNode.insertBefore(headerNode, main);
+
+                    Ember.run.scheduleOnce('afterRender', () => {
+                        $('.navbar-toggle').off('click.navbar-toggle');
+                        $('.navbar-toggle').on('click.navbar-toggle', () => {
+                            $('.project-nav').animate({height: 'toggle'}, {complete: () => {
+                                var endHeight = $('.project-nav')[0].offsetHeight; // .height() doesn't work if hidden
+                                //$('#main-outlet').css('margin-top', endHeight + 'px');
+                            }});
+                        });
+                    });
+                }
 
                 if (url.startsWith('/t/') || url.startsWith('/forum/')) {
                     $('#main-outlet').addClass('has-osf-bar');
@@ -253,6 +289,9 @@ export default {
                 }
 
                 replaceUsernames();
+
+                // Don't cloak the first post, which may have an MFR view in it.
+                api.preventCloak(topicModel.get('postStream').posts[0].id);
             }
         });
 

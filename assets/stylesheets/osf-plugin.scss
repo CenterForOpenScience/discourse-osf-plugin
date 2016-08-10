@@ -62,10 +62,6 @@ header {
     padding-top: 18px;
 }
 
-#main-outlet.has-osf-bar {
-    padding-top: 60px;
-}
-
 .d-header .icons .icon:hover{
     color: #ccc;
     background-color: #263947;
@@ -180,7 +176,7 @@ header {
 }
 
 /* For centering of the project header */
-#project-header ul {
+.project-nav ul {
     margin: 0 auto;
     padding: 0;
 
@@ -195,25 +191,20 @@ header {
     }
 }
 
-#project-header * {
+.osf-project-navbar * {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
 }
 
-#project-header {
+.osf-project-navbar {
     background-color: #eee;
     box-shadow: 0 0 9px -1px #838383;
     overflow: hidden;
-
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-
     -webkit-font-smoothing: antialiased;
 }
 
-#project-header > ul > li {
+.project-nav > ul > li {
     float: left;
     margin-left: auto;
     margin-right: auto;
@@ -224,7 +215,7 @@ header {
     box-sizing: border-box;
 }
 
-#project-header > ul > li > a {
+.project-nav > ul > li > a {
     display: block;
 
     color: #337ab7;
@@ -248,17 +239,17 @@ header {
     }
 }
 
-#project-header > ul > li.header-offset {
+.project-nav > ul > li.header-offset {
     min-width: 15px;
     min-height: 1px;
 }
 
-#project-header > ul > li > a.project-parent {
+.project-nav > ul > li > a.project-parent {
     padding-left: 17px;
     padding-right: 17px;
 }
 
-#project-header > ul > li > a.project-name {
+.project-nav > ul > li > a.project-name {
     font-weight: 300;
     font-size: 20px;
     white-space: nowrap;
@@ -274,28 +265,107 @@ header {
     }
 }
 
-#project-header > ul > li > a.project-forum {
+.project-nav > ul > li > a.project-forum {
     background-color: #337ab7;
     color: white;
 }
 
-#project-header > ul > li > a.project-forum:hover {
+.project-nav > ul > li > a.project-forum:hover {
     color: white;
 }
 
-#project-header > ul > li:hover {
+.project-nav > ul > li:hover {
     background-color: #e1e1e1;
 }
 
-#project-header > ul > li > a:hover {
+.project-nav > ul > li > a:hover {
     color: #337ab7;
+}
+
+/* Mobile support */
+@media (max-width: 767px) {
+    .project-nav ul {
+        margin: 0;
+        width: 100%;
+    }
+    .project-nav ul > li {
+        float: none;
+    }
+    .project-nav ul > li > a {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+    .project-nav ul > li > a.project-name {
+        max-width: 100%;
+    }
+    .project-nav {
+        overflow: hidden;
+        height: 100%;
+        display: none;
+    }
+}
+
+.navbar-header {
+    width: 100%;
+    display: table;
+}
+
+.navbar-brand {
+    float: left;
+    padding: 12px 15px;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 20px;
+}
+a.navbar-brand, a.navbar-brand:visited {
+    color: #337ab7;
+}
+a.navbar-brand:hover {
+    color: #23527c;
+}
+.navbar-brand, .navbar-nav > li > a {
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+.navbar-toggle {
+    position: relative;
+    float: right;
+    margin: 0;
+    padding: 12px 15px;
+    line-height: 20px;
+    font-size: 14px;
+    background-color: transparent;
+    background-image: none;
+    border: 0px solid transparent;
+}
+.navbar-toggle:focus {
+    outline: 0;
+}
+@media (min-width: 768px) {
+    .osf-project-navbar {
+        position: fixed;
+        z-index: 99;
+        width: 100%;
+        top: 51px;
+    }
+    #main-outlet.has-osf-bar {
+        margin-top: 44px;
+    }
+    .navbar-toggle {
+        display: none;
+    }
+    .navbar-brand {
+        display: none;
+    }
+    .project-nav {
+        display: block !important; /* Ignore display setting for mobile mode */
+    }
 }
 
 .embed-responsive {
     position: relative;
     height: 100%;
 }
-
 .embed-responsive iframe {
     position: absolute;
     height: 100%;

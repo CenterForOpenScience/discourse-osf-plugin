@@ -2,3 +2,5 @@ en:
   site_settings:
     osf_plugin_active: "Enable Open Science Framework integration with Discourse."
     osf_domain: "Domain of the OSF instance associated with Discourse."
+    mfr_domain: "Domain of the Modular File Renderer to be used to display inline files."
+    
