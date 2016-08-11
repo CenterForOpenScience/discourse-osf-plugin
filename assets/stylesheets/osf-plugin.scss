@@ -175,7 +175,7 @@ header {
   }
 }
 
-/* For centering of the project header */
+// For centering of the project header
 .project-nav ul {
     margin: 0 auto;
     padding: 0;
@@ -232,7 +232,6 @@ header {
         padding-left: 10px;
         padding-right: 10px;
     }
-
     @media (min-width: 992px) {
         padding-left: 15px;
         padding-right: 15px;
@@ -269,21 +268,24 @@ header {
     background-color: #337ab7;
     color: white;
 }
-
 .project-nav > ul > li > a.project-forum:hover {
     color: white;
 }
-
 .project-nav > ul > li:hover {
     background-color: #e1e1e1;
 }
-
 .project-nav > ul > li > a:hover {
     color: #337ab7;
 }
 
 /* Mobile support */
 @media (max-width: 767px) {
+    #main-outlet {
+        padding-top: 0px;
+    }
+    .osf-project-navbar {
+        margin-top: -3px;
+    }
     .project-nav ul {
         margin: 0;
         width: 100%;
@@ -309,7 +311,6 @@ header {
     width: 100%;
     display: table;
 }
-
 .navbar-brand {
     float: left;
     padding: 12px 15px;
@@ -358,10 +359,11 @@ a.navbar-brand:hover {
         display: none;
     }
     .project-nav {
-        display: block !important; /* Ignore display setting for mobile mode */
+        display: block !important; // Ignore the display setting used in mobile mode
     }
 }
 
+// These bootstrap styles are necessary for the MFR view to correctly calculate the height of PDFs
 .embed-responsive {
     position: relative;
     height: 100%;
@@ -371,10 +373,12 @@ a.navbar-brand:hover {
     height: 100%;
 }
 
+// Only relevant in Development mode, but annoying enough to hide.
 .profiler-results {
     display: none;
 }
 
+// Don't show GUID usernames
 span.second.username {
     display: none;
 }

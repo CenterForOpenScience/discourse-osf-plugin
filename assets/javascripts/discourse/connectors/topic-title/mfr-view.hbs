@@ -10,13 +10,15 @@ var observeDOM = (function(){
                 if( mutations[0].addedNodes.length || mutations[0].removedNodes.length )
                     callback();
             });
-            // have the observer observe foo for changes in children
             obs.observe( obj, { childList:true, subtree:true });
         }
     }
 })();
 
-// Observe a specific DOM element:
+// On any DOM change
+// Check if the page is a topic page and has the topic post. If this post has a link
+// similar to osf.io/guidx, then we know the topic is linking to the file it is about.
+// We insert a button that when clicked shows the full MFR view of that file.
 observeDOM(document.body, function() {
     var topic_post = document.querySelector('.topic-post article#post_1 .cooked');
     if (!topic_post) return;

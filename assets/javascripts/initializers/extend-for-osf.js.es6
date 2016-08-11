@@ -13,6 +13,8 @@ import { wantsNewWindow } from 'discourse/lib/intercept-click';
 import UserCardView from 'discourse/views/user-card';
 import TopicListModel from 'discourse/models/topic-list';
 import DiscoveryTopics from 'discourse/controllers/discovery/topics';
+import computed from 'ember-addons/ember-computed-decorators';
+import TopicListItem from 'discourse/components/topic-list-item';
 
 export default {
     name: "extend-for-osf",
@@ -42,16 +44,16 @@ export default {
                 }
             } else if (route.startsWith('projects.show') || route.startsWith('projects.top')) {
                 var projectList = container.lookup('controller:projects.show').list;
-                if (!projectList) {
-                    return '';
+                if (projectList) {
+                    var projectTopicList = projectList.topic_list;
+                    title = projectTopicList.parent_names[0];
+                    guid = projectTopicList.parent_guids[0];
+                    parent_guid = projectTopicList.parent_guids[1];
                 }
-                var projectTopicList = projectList.topic_list;
-                title = projectTopicList.parent_names[0];
-                guid = projectTopicList.parent_guids[0];
-                parent_guid = projectTopicList.parent_guids[1];
             }
             if (!title) {
-                return '';
+                // empty
+                return h('nav#projectSubnav');
             }
 
             return h('nav#projectSubnav.navbar.osf-project-navbar[role=navigation]',
@@ -69,52 +71,61 @@ export default {
                             h('ul.nav.navbar-nav', [
                                 parent_guid ? h('li',
                                     h('a.project-parent', {
-                                        'href': `${base_osf_url}/${parent_guid}/`
+                                        'href': `${base_osf_url}/${parent_guid}/`,
+                                        'target': '_self' // Does nothing, but prevents bug in intercept-click from misrouting it
                                     }, h('i.fa.fa-level-down.fa-rotate-180'))
                                 ) : null,
                                 h('li',
                                     h('a.project-name', {
-                                        'href': `${base_osf_url}/${guid}/`
+                                        'href': `${base_osf_url}/${guid}/`,
+                                        'target': '_self'
                                     }, `${title}`)
                                 ),
                                 h('li',
                                     h('a', {
-                                        'href': `${base_osf_url}/${guid}/files`
+                                        'href': `${base_osf_url}/${guid}/files`,
+                                        'target': '_self'
                                     }, "Files")
                                 ),
                                 h('li',
                                     h('a.project-forum', {
-                                        'href': `${base_disc_url}/forum/${guid}`
+                                        'href': `${base_disc_url}/forum/${guid}`,
                                     }, "Forum")
                                 ),
                                 h('li',
                                     h('a', {
-                                        'href': `${base_osf_url}/${guid}/wiki`
+                                        'href': `${base_osf_url}/${guid}/wiki`,
+                                        'target': '_self'
                                     }, "Wiki")
                                 ),
                                 h('li',
                                     h('a', {
-                                        'href': `${base_osf_url}/${guid}/analytics`
+                                        'href': `${base_osf_url}/${guid}/analytics`,
+                                        'target': '_self'
                                     }, "Analytics")
                                 ),
                                 h('li',
                                     h('a', {
-                                        'href': `${base_osf_url}/${guid}/registrations`
+                                        'href': `${base_osf_url}/${guid}/registrations`,
+                                        'target': '_self'
                                     }, "Registrations")
                                 ),
                                 h('li',
                                     h('a', {
-                                        'href': `${base_osf_url}/${guid}/forks`
+                                        'href': `${base_osf_url}/${guid}/forks`,
+                                        'target': '_self'
                                     }, "Forks")
                                 ),
                                 h('li',
                                     h('a', {
-                                        'href': `${base_osf_url}/${guid}/contributors`
+                                        'href': `${base_osf_url}/${guid}/contributors`,
+                                        'target': '_self'
                                     }, "Contributors")
                                 ),
                                 h('li',
                                     h('a', {
-                                        'href': `${base_osf_url}/${guid}/settings`
+                                        'href': `${base_osf_url}/${guid}/settings`,
+                                        'target': '_self'
                                     }, "Settings")
                                 )
                             ])
@@ -169,7 +180,10 @@ export default {
             _.each(avatarElems, elem => {
                 if (elem.title.length === 0) {
                     // For the composer, where the username text follows and is not in the title.
-                    let sibling = elem.nextElementSibling;
+                    let sibling = elem.nextSibling;
+                    if (!sibling || !usernamesToNames[sibling.textContent.trim().split(' ')[0]]) {
+                        sibling = elem.nextElementSibling;
+                    }
                     if (sibling) {
                         let username = sibling.textContent.trim().split(' ')[0];
                         let name = usernamesToNames[username];
@@ -202,7 +216,6 @@ export default {
         };
 
         var projectHeader = null;
-        var headerNode = null;
         var api;
         withPluginApi('0.1', _api => {
             api = _api;
@@ -210,27 +223,24 @@ export default {
                 // We do all the work with VirtualDom ourselves so that we can place
                 // the header exactly where we want it.
                 var subnav = document.getElementById('projectSubnav');
-                if (projectHeader) {
+                if (subnav) {
                     var newProjectHeader = renderOsfProjectMenu();
                     var patches = VirtualDom.diff(projectHeader, newProjectHeader);
-                    headerNode = VirtualDom.patch(headerNode, patches);
+                    subnav = VirtualDom.patch(subnav, patches);
                     projectHeader = newProjectHeader;
                 } else {
                     projectHeader = renderOsfProjectMenu();
-                    headerNode = VirtualDom.create(projectHeader);
+                    subnav = VirtualDom.create(projectHeader);
                     var main = document.getElementById('main-outlet');
-                    main.parentNode.insertBefore(headerNode, main);
-
-                    Ember.run.scheduleOnce('afterRender', () => {
-                        $('.navbar-toggle').off('click.navbar-toggle');
-                        $('.navbar-toggle').on('click.navbar-toggle', () => {
-                            $('.project-nav').animate({height: 'toggle'}, {complete: () => {
-                                var endHeight = $('.project-nav')[0].offsetHeight; // .height() doesn't work if hidden
-                                //$('#main-outlet').css('margin-top', endHeight + 'px');
-                            }});
-                        });
-                    });
+                    main.parentNode.insertBefore(subnav, main);
                 }
+
+                Ember.run.scheduleOnce('afterRender', () => {
+                    $('.navbar-toggle').off('click.navbar-toggle');
+                    $('.navbar-toggle').on('click.navbar-toggle', () => {
+                        $('.project-nav').animate({height: 'toggle'});
+                    });
+                });
 
                 if (url.startsWith('/t/') || url.startsWith('/forum/')) {
                     $('#main-outlet').addClass('has-osf-bar');
@@ -238,7 +248,7 @@ export default {
                     $('#main-outlet').removeClass('has-osf-bar');
                 }
 
-                replaceUsernames();
+                Ember.run.scheduleOnce('afterRender', replaceUsernames);
             });
         });
 
@@ -288,10 +298,10 @@ export default {
                     $('button.share').addClass('private');
                 }
 
-                replaceUsernames();
-
                 // Don't cloak the first post, which may have an MFR view in it.
                 api.preventCloak(topicModel.get('postStream').posts[0].id);
+
+                replaceUsernames();
             }
         });
 
@@ -313,6 +323,14 @@ export default {
                     this._super();
                     Ember.run.scheduleOnce('afterRender', replaceUsernames);
                 },
+            }
+        });
+
+        // Always display the topic excerpt
+        TopicListItem.reopen({
+            @computed()
+            expandPinned() {
+              return Boolean(this.get('topic.excerpt'));
             }
         });
     }
