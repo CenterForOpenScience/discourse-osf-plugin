@@ -233,8 +233,8 @@ header {
         padding-right: 10px;
     }
     @media (min-width: 992px) {
-        padding-left: 15px;
-        padding-right: 15px;
+        padding-left: 12px;
+        padding-right: 12px;
     }
 }
 
@@ -255,12 +255,12 @@ header {
     text-overflow: ellipsis;
     overflow: hidden;
 
-    max-width: 170px;
+    max-width: 220px;
     @media (min-width: 864px) {
-        max-width: 190px;
+        max-width: 240px;
     }
     @media (min-width: 992px) {
-        max-width: 300px;
+        max-width: 330px;
     }
 }
 
@@ -280,7 +280,7 @@ header {
 
 /* Mobile support */
 @media (max-width: 767px) {
-    #main-outlet {
+    #main-outlet.has-osf-bar {
         padding-top: 0px;
     }
     .osf-project-navbar {
@@ -351,6 +351,7 @@ a.navbar-brand:hover {
     }
     #main-outlet.has-osf-bar {
         margin-top: 44px;
+        padding-top: 0px;
     }
     .navbar-toggle {
         display: none;

@@ -3,7 +3,7 @@
 # version: 0.1
 # author: Joshua Bird, Acshi Haggenmiller
 
-enabled_site_setting :osf_plugin_active
+enabled_site_setting :osf_plugin_enabled
 
 register_asset 'stylesheets/osf-plugin.scss'
 register_custom_html(top:
