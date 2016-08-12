@@ -140,7 +140,7 @@ export default {
             // We want to make all these image tags have tooltips with the name, not the username
             // We specify just the ones we want because we don't want to mess with the ones
             // that show up for the autocorrect, which should show both username and full name
-            var avatarElems = document.querySelectorAll('#current-user img, .topic-avatar img, .reply-to img, .reply-to-tab img, .posters img, .topic-map img');
+            var avatarElems = document.querySelectorAll('#current-user img, .topic-avatar img, .reply-to img, .reply-to-tab img, .posters img, .topic-map img, .user-image img');
 
             var usernamesToNames = {};
 
