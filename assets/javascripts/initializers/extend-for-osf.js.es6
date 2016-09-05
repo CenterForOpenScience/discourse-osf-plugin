@@ -15,6 +15,7 @@ import TopicListModel from 'discourse/models/topic-list';
 import DiscoveryTopics from 'discourse/controllers/discovery/topics';
 import computed from 'ember-addons/ember-computed-decorators';
 import TopicListItem from 'discourse/components/topic-list-item';
+import TopicView from 'discourse/views/topic';
 
 export default {
     name: "extend-for-osf",
@@ -213,43 +214,73 @@ export default {
                     elem.textContent = '@' + name;
                 }
             });
+
+            // Show full name in the User Menu
+            var userLink = document.querySelector('a.user-activity-link');
+            if (userLink) {
+                userLink.title = currentUser.name;
+                _.each(userLink.childNodes, elem => {
+                    if (elem.nodeName === '#text') {
+                        elem.data = elem.data.replace(currentUser.username, currentUser.name);
+                    }
+                });
+            }
         };
 
         var projectHeader = null;
+        var updateProjectHeader = function() {
+            // We do all the work with VirtualDom ourselves so that we can place
+            // the header exactly where we want it.
+
+            // If we are waiting for the topic model to be fully loaded, however, we don't
+            // want to take down the old project header yet.
+            var container = Discourse.__container__;
+            var route = container.lookup('controller:Application').currentPath;
+            if (route.startsWith('topic') && !container.lookup('controller:topic').model.parent_guids) {
+                return;
+            }
+
+            var subnav = document.getElementById('projectSubnav');
+            if (subnav) {
+                var newProjectHeader = renderOsfProjectMenu();
+                var patches = VirtualDom.diff(projectHeader, newProjectHeader);
+                subnav = VirtualDom.patch(subnav, patches);
+                projectHeader = newProjectHeader;
+            } else {
+                projectHeader = renderOsfProjectMenu();
+                subnav = VirtualDom.create(projectHeader);
+                var main = document.getElementById('main-outlet');
+                main.parentNode.insertBefore(subnav, main);
+            }
+        }
+
         var api;
         withPluginApi('0.1', _api => {
             api = _api;
             api.onPageChange((url, title) => {
-                // We do all the work with VirtualDom ourselves so that we can place
-                // the header exactly where we want it.
-                var subnav = document.getElementById('projectSubnav');
-                if (subnav) {
-                    var newProjectHeader = renderOsfProjectMenu();
-                    var patches = VirtualDom.diff(projectHeader, newProjectHeader);
-                    subnav = VirtualDom.patch(subnav, patches);
-                    projectHeader = newProjectHeader;
-                } else {
-                    projectHeader = renderOsfProjectMenu();
-                    subnav = VirtualDom.create(projectHeader);
-                    var main = document.getElementById('main-outlet');
-                    main.parentNode.insertBefore(subnav, main);
-                }
-
                 Ember.run.scheduleOnce('afterRender', () => {
+                    updateProjectHeader();
+
                     $('.navbar-toggle').off('click.navbar-toggle');
                     $('.navbar-toggle').on('click.navbar-toggle', () => {
                         $('.project-nav').animate({height: 'toggle'});
                     });
+
+                    if (url.startsWith('/t/') || url.startsWith('/forum/')) {
+                        $('#main-outlet').addClass('has-osf-bar');
+                    } else {
+                        $('#main-outlet').removeClass('has-osf-bar');
+                    }
+
+                    replaceUsernames();
                 });
-
-                if (url.startsWith('/t/') || url.startsWith('/forum/')) {
-                    $('#main-outlet').addClass('has-osf-bar');
-                } else {
-                    $('#main-outlet').removeClass('has-osf-bar');
-                }
-
-                Ember.run.scheduleOnce('afterRender', replaceUsernames);
             });
+        });
+
+        TopicView.reopen({
+            topicModelChanged: function() {
+                Ember.run.scheduleOnce('afterRender', updateProjectHeader);
+            }.observes('topic.parent_guids', 'topic.parent_names')
         });
 
         // Because we modify @mentions to show full names, we also have to modify the click handler
@@ -303,6 +334,11 @@ export default {
 
                 replaceUsernames();
             }
+        });
+
+        // When the user dropdown appears, we need to do a username replacement for it
+        $(document).on('click', '#current-user a', e => {
+            Ember.run.scheduleOnce('afterRender', replaceUsernames);
         });
 
         ComposerController.reopen({
