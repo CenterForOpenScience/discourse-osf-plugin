@@ -17,6 +17,14 @@ import computed from 'ember-addons/ember-computed-decorators';
 import TopicListItem from 'discourse/components/topic-list-item';
 import TopicView from 'discourse/views/topic';
 
+// startsWith polyfill from https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/startsWith
+if (!String.prototype.startsWith) {
+    String.prototype.startsWith = function(searchString, position) {
+        position = position || 0;
+        return this.substr(position, searchString.length) === searchString;
+    };
+}
+
 export default {
     name: "extend-for-osf",
     initialize() {

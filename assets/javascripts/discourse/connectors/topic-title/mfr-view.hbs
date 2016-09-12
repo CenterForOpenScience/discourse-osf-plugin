@@ -25,12 +25,12 @@ observeDOM(document.body, function() {
     if (document.getElementById('mfrButton')) return;
 
     var mfrDomain = Discourse.SiteSettings.mfr_domain;
-    if (mfrDomain.endsWith('/')) {
+    if (mfrDomain[mfrDomain.length - 1] === '/') {
         mfrDomain = mfrDomain.slice(0, -1);
     }
 
     var osfDomain = Discourse.SiteSettings.osf_domain;
-    if (osfDomain.endsWith('/')) {
+    if (osfDomain[osfDomain.length - 1] === '/') {
         osfDomain = osfDomain.slice(0, -1);
     }
 
