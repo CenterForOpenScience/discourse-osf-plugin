@@ -32,7 +32,7 @@ export default {
             var container = Discourse.__container__;
 
             var base_osf_url = Discourse.SiteSettings.osf_domain;
-            if (base_osf_url.endsWith('/')) {
+            if (base_osf_url[base_osf_url.length - 1] === '/') {
                 base_osf_url = base_osf_url.slice(0, -1);
             }
 
