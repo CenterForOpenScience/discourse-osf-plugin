@@ -153,37 +153,42 @@ export default {
 
             var usernamesToNames = {};
 
-            var currentUser = Discourse.__container__.lookup('component:siteHeader').currentUser;
+            var container = Discourse.__container__;
+            var route = container.lookup('controller:Application').currentPath;
+
+            var currentUser = container.lookup('component:siteHeader').currentUser;
             if (currentUser) {
                 usernamesToNames[currentUser.username] = currentUser.name;
             }
 
-            var topicsModel = Discourse.__container__.lookup('controller:discovery.topics').model;
-            if (topicsModel) {
-                _.each(topicsModel.topic_list.topics, topic => {
-                    _.each(topic.posters, poster => {
-                        usernamesToNames[poster.user.username] = poster.user.name;
+            if (route.startsWith('projects.show') || route.startsWith('projects.top')) {
+                var topicsModel = container.lookup('controller:discovery.topics').model;
+                if (topicsModel) {
+                    _.each(topicsModel.topic_list.topics, topic => {
+                        _.each(topic.posters, poster => {
+                            usernamesToNames[poster.user.username] = poster.user.name;
+                        });
+                        _.each(topic.excerpt_mentioned_users, user => {
+                            usernamesToNames[user.username] = user.name;
+                        });
                     });
-                    _.each(topic.excerpt_mentioned_users, user => {
-                        usernamesToNames[user.username] = user.name;
+                    _.each(topicsModel.topic_list.contributors, contributor => {
+                        usernamesToNames[contributor.username] = contributor.name;
                     });
-                });
-                _.each(topicsModel.topic_list.contributors, contributor => {
-                    usernamesToNames[contributor.username] = contributor.name;
-                });
-            }
-
-            var topicModel = Discourse.__container__.lookup('controller:topic').model;
-            if (topicModel) {
-                _.each(topicModel.get('postStream').posts, post => {
-                    usernamesToNames[post.username] = post.name;
-                    if (post.reply_to_user) {
-                        usernamesToNames[post.reply_to_user.username] = post.reply_to_user.name;
-                    }
-                });
-                _.each(topicModel.contributors, contributor => {
-                    usernamesToNames[contributor.username] = contributor.name;
-                });
+                }
+            } else if (route.startsWith('topic')) {
+                var topicModel = container.lookup('controller:topic').model;
+                if (topicModel) {
+                    _.each(topicModel.get('postStream').posts, post => {
+                        usernamesToNames[post.username] = post.name;
+                        if (post.reply_to_user) {
+                            usernamesToNames[post.reply_to_user.username] = post.reply_to_user.name;
+                        }
+                    });
+                    _.each(topicModel.contributors, contributor => {
+                        usernamesToNames[contributor.username] = contributor.name;
+                    });
+                }
             }
 
             _.each(avatarElems, elem => {
@@ -338,7 +343,10 @@ export default {
                 }
 
                 // Don't cloak the first post, which may have an MFR view in it.
-                api.preventCloak(topicModel.get('postStream').posts[0].id);
+                var firstPost = topicModel.get('postStream').posts[0];
+                if (firstPost) {
+                    api.preventCloak(firstPost.id);
+                }
 
                 replaceUsernames();
             }
