@@ -161,7 +161,7 @@ export default {
                 usernamesToNames[currentUser.username] = currentUser.name;
             }
 
-            if (route.startsWith('projects.show') || route.startsWith('projects.top')) {
+            if (route.startsWith('discovery') || route.startsWith('projects')) {
                 var topicsModel = container.lookup('controller:discovery.topics').model;
                 if (topicsModel) {
                     _.each(topicsModel.topic_list.topics, topic => {

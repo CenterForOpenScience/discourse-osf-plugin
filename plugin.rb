@@ -4,11 +4,9 @@
 # author: Joshua Bird, Acshi Haggenmiller
 
 enabled_site_setting :osf_plugin_enabled
-
 register_asset 'stylesheets/osf-plugin.scss'
-register_custom_html(top:
-    "<link href='//fonts.googleapis.com/css?family=Carrois+Gothic|Inika|Patua+One' rel='stylesheet' type='text/css'>
-     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,300,700' rel='stylesheet' type='text/css'>")
+register_asset 'stylesheets/bootstrapcols.scss'
+register_asset 'stylesheets/footer.scss'
 
 after_initialize do
     require_dependency 'application_controller'

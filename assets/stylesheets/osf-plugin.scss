@@ -379,6 +379,11 @@ a.navbar-brand:hover {
     display: none;
 }
 
+// Also annoying in development mode
+.alert-emails-disabled {
+    display: none;
+}
+
 // Don't show GUID usernames
 span.second.username {
     display: none;
