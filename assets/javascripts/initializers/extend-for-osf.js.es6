@@ -41,24 +41,29 @@ export default {
             var title = '';
             var guid = '';
             var parent_guid = '';
+            var queryString = '';
 
             var route = container.lookup('controller:Application').currentPath;
 
             if (route.startsWith('topic')) {
-                var topicModel = container.lookup('controller:topic').model;
+                var topicController = container.lookup('controller:topic');
+                var topicModel = topicController.model;
                 if (topicModel.parent_names) {
                     title = topicModel.parent_names[0];
                     guid = topicModel.parent_guids[0];
                     parent_guid = topicModel.parent_guids[1];
                 }
+                queryString = topicController.view_only ? '?view_only=' + topicController.view_only : '';
             } else if (route.startsWith('projects.show') || route.startsWith('projects.top')) {
-                var projectList = container.lookup('controller:projects.show').list;
+                var projectController = container.lookup('controller:projects.show');
+                var projectList = projectController.list;
                 if (projectList) {
                     var projectTopicList = projectList.topic_list;
                     title = projectTopicList.parent_names[0];
                     guid = projectTopicList.parent_guids[0];
                     parent_guid = projectTopicList.parent_guids[1];
                 }
+                queryString = projectController.view_only ? '?view_only=' + projectController.view_only : '';
             }
             if (!title) {
                 // empty
@@ -73,67 +78,67 @@ export default {
                                 }}, [h('span.sr-only', 'Toggle navigation'), h('span.fa.fa-bars.fa-lg')]
                             ),
                             h('a.navbar-brand.visible-xs', {
-                                'href':`/forum/${guid}`
+                                'href':`/forum/${guid}/${queryString}`
                             }, 'Project Navigation')
                         ]),
                         h('div.collapse.navbar-collapse.project-nav',
                             h('ul.nav.navbar-nav', [
                                 parent_guid ? h('li',
                                     h('a.project-parent', {
-                                        'href': `${base_osf_url}/${parent_guid}/`,
+                                        'href': `${base_osf_url}/${parent_guid}/${queryString}`,
                                         'target': '_self' // Does nothing, but prevents bug in intercept-click from misrouting it
                                     }, h('i.fa.fa-level-down.fa-rotate-180'))
                                 ) : null,
                                 h('li',
                                     h('a.project-name', {
-                                        'href': `${base_osf_url}/${guid}/`,
+                                        'href': `${base_osf_url}/${guid}/${queryString}`,
                                         'target': '_self'
                                     }, `${title}`)
                                 ),
                                 h('li',
                                     h('a', {
-                                        'href': `${base_osf_url}/${guid}/files`,
+                                        'href': `${base_osf_url}/${guid}/files/${queryString}`,
                                         'target': '_self'
                                     }, "Files")
                                 ),
                                 h('li',
                                     h('a.project-forum', {
-                                        'href': `${base_disc_url}/forum/${guid}`,
+                                        'href': `${base_disc_url}/forum/${guid}/${queryString}`,
                                     }, "Forum")
                                 ),
                                 h('li',
                                     h('a', {
-                                        'href': `${base_osf_url}/${guid}/wiki`,
+                                        'href': `${base_osf_url}/${guid}/wiki/${queryString}`,
                                         'target': '_self'
                                     }, "Wiki")
                                 ),
                                 h('li',
                                     h('a', {
-                                        'href': `${base_osf_url}/${guid}/analytics`,
+                                        'href': `${base_osf_url}/${guid}/analytics/${queryString}`,
                                         'target': '_self'
                                     }, "Analytics")
                                 ),
                                 h('li',
                                     h('a', {
-                                        'href': `${base_osf_url}/${guid}/registrations`,
+                                        'href': `${base_osf_url}/${guid}/registrations/${queryString}`,
                                         'target': '_self'
                                     }, "Registrations")
                                 ),
                                 h('li',
                                     h('a', {
-                                        'href': `${base_osf_url}/${guid}/forks`,
+                                        'href': `${base_osf_url}/${guid}/forks/${queryString}`,
                                         'target': '_self'
                                     }, "Forks")
                                 ),
                                 h('li',
                                     h('a', {
-                                        'href': `${base_osf_url}/${guid}/contributors`,
+                                        'href': `${base_osf_url}/${guid}/contributors/${queryString}`,
                                         'target': '_self'
                                     }, "Contributors")
                                 ),
                                 h('li',
                                     h('a', {
-                                        'href': `${base_osf_url}/${guid}/settings`,
+                                        'href': `${base_osf_url}/${guid}/settings/${queryString}`,
                                         'target': '_self'
                                     }, "Settings")
                                 )
