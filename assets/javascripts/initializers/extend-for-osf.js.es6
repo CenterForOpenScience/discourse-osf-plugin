@@ -43,6 +43,10 @@ export default {
             var parent_guid = '';
             var queryString = '';
 
+            var currentUser = container.lookup('component:siteHeader').currentUser;
+            var contributors = null;
+            var isContributor = false;
+
             var route = container.lookup('controller:Application').currentPath;
 
             if (route.startsWith('topic')) {
@@ -52,6 +56,7 @@ export default {
                     title = topicModel.parent_names[0];
                     guid = topicModel.parent_guids[0];
                     parent_guid = topicModel.parent_guids[1];
+                    contributors = topicModel.contributors;
                 }
                 queryString = topicController.view_only ? '?view_only=' + topicController.view_only : '';
             } else if (route.startsWith('projects.show') || route.startsWith('projects.top')) {
@@ -62,12 +67,22 @@ export default {
                     title = projectTopicList.parent_names[0];
                     guid = projectTopicList.parent_guids[0];
                     parent_guid = projectTopicList.parent_guids[1];
+                    contributors = projectTopicList.contributors;
                 }
                 queryString = projectController.view_only ? '?view_only=' + projectController.view_only : '';
             }
             if (!title) {
                 // empty
                 return h('nav#projectSubnav');
+            }
+
+            var isContributor = false;
+            if (!queryString && currentUser && contributors) {
+                _.each(contributors, c => {
+                    if (c.username === currentUser.username) {
+                        isContributor = true;
+                    }
+                });
             }
 
             return h('nav#projectSubnav.navbar.osf-project-navbar[role=navigation]',
@@ -112,12 +127,12 @@ export default {
                                         'target': '_self'
                                     }, "Wiki")
                                 ),
-                                h('li',
+                                isContributor ? h('li',
                                     h('a', {
                                         'href': `${base_osf_url}/${guid}/analytics/${queryString}`,
                                         'target': '_self'
                                     }, "Analytics")
-                                ),
+                                ) : null,
                                 h('li',
                                     h('a', {
                                         'href': `${base_osf_url}/${guid}/registrations/${queryString}`,
@@ -130,18 +145,18 @@ export default {
                                         'target': '_self'
                                     }, "Forks")
                                 ),
-                                h('li',
+                                isContributor ? h('li',
                                     h('a', {
                                         'href': `${base_osf_url}/${guid}/contributors/${queryString}`,
                                         'target': '_self'
                                     }, "Contributors")
-                                ),
-                                h('li',
+                                ) : null,
+                                isContributor ? h('li',
                                     h('a', {
                                         'href': `${base_osf_url}/${guid}/settings/${queryString}`,
                                         'target': '_self'
                                     }, "Settings")
-                                )
+                                ) : null
                             ])
                         )
                     ]

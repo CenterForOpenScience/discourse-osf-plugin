@@ -39,4 +39,3 @@ Make sure that \@mention and other notifications work in a way compatible with t
 The color of the OSF header and footer links appears to change when the page is loading, but the computed css styles show no change. Odd bug.
 Fix the 404 not found page so it doesn't look so broken.
 Timeline tool on the right of a topic page doesn't move down for the osf project bar.
-In Chrome the copyright text in the footer has mysterious underlining.
