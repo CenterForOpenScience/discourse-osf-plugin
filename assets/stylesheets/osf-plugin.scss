@@ -43,11 +43,16 @@ header {
 .d-header #site-logo {
     vertical-align: bottom;
     max-height: 27px;
-    margin-right: 4px;
+    margin-right: 8px;
 }
 
 .d-header .contents {
     margin: 0;
+}
+
+.d-header .panel {
+    margin-top: 7.5px;
+    margin-bottom: 7.5px;
 }
 
 body #main {

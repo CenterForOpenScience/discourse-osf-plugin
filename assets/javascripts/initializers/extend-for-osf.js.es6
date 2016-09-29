@@ -16,6 +16,7 @@ import DiscoveryTopics from 'discourse/controllers/discovery/topics';
 import computed from 'ember-addons/ember-computed-decorators';
 import TopicListItem from 'discourse/components/topic-list-item';
 import TopicView from 'discourse/views/topic';
+import TopicTimeline from 'discourse/components/topic-timeline';
 
 // startsWith polyfill from https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/startsWith
 if (!String.prototype.startsWith) {
@@ -403,6 +404,17 @@ export default {
             @computed()
             expandPinned() {
               return Boolean(this.get('topic.excerpt'));
+            }
+        });
+
+        // Move the timeline out of the way of the project bar
+        TopicTimeline.reopen({
+            buildArgs() {
+                var args = this._super();
+                if ($('#main-outlet').hasClass('has-osf-bar')) {
+                    args['top'] = Math.max(args['top'], 115);
+                }
+                return args;
             }
         });
     }
