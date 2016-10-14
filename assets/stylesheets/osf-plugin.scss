@@ -49,8 +49,9 @@ header {
 
 .d-header #site-logo {
     vertical-align: bottom;
-    max-height: 27px;
     margin-right: 8px;
+    width: 27px;
+    height: 27px;
 
     color: white;
     background-color: transparent;
@@ -65,6 +66,19 @@ header {
 .d-header .panel {
     margin-top: 7.5px;
     margin-bottom: 7.5px;
+}
+
+.drop-down-visible .d-header .icons .active .icon {
+    background-color: #080808;
+    border: none;
+}
+
+.drop-down-visible .d-header .icons .active .icon:after {
+    border: none;
+}
+
+.d-header .icons .icon:hover {
+    border: none;
 }
 
 body #main {
