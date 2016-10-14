@@ -7,10 +7,9 @@ footer.footer {
     text-shadow: 0 1px 0 #fff;
     border-top: 1px solid #e5e5e5;
     border-bottom: 1px solid #e5e5e5;
-    width: 100%;
     color: #555;
+    line-height: 20px;
 
-    box-sizing: border-box;
     padding: 30px;
     margin-top: 30px;
     margin-bottom: 30px;
@@ -32,18 +31,27 @@ footer.footer, .copyright {
     }
 }
 
-.footer h4 {
+footer.footer h4 {
     margin-top: 10px;
     margin-bottom: 10px;
     font-size: 18px;
-    font-weight: normal;
-    line-height: 19.8px;
+    font-weight: 500;
+    line-height: 1.1;
 }
 
-.footer ul, .footer li {
+footer.footer ul, footer.footer li {
     padding: 0;
     margin: 0;
     list-style-type: none;
+}
+
+footer.footer .container {
+    margin-left: 127px;
+    margin-right: 127px;
+}
+
+footer.footer * {
+    box-sizing: border-box;
 }
 
 /* Footer slide-in */
@@ -79,5 +87,5 @@ footer.footer, .copyright {
     text-align: center;
     background: #fff;
     width: 100%;
-
+    line-height: 20px;
 }
