@@ -69,7 +69,8 @@ header {
 }
 
 .drop-down-visible .d-header .icons .active .icon {
-    background-color: #080808;
+    color: #aaa;
+    background-color: white;
     border: none;
 }
 
@@ -78,7 +79,37 @@ header {
 }
 
 .d-header .icons .icon:hover {
+    color: #7b7b7b;
+    background-color: #f7f7f7;
     border: none;
+}
+
+.d-header .icons .icon {
+    -webkit-font-smoothing: antialiased;
+     border: none;
+     color: white;
+}
+
+.d-header .icons [class^="fa fa-"] {
+    width: 26px;
+    height: 26px;
+    font-size: 20px;
+    line-height: 26px;
+    display: inline-block;
+}
+
+#current-user img.avatar {
+    width: 26px;
+    height: 26px;
+}
+
+#current-user img.avatar a:after {
+    font-size: 18px;
+    line-height: 25px;
+
+    font-weight: normal;
+    content: title;
+    vertical-align: middle;
 }
 
 body #main {
@@ -111,26 +142,6 @@ header.d-header {
     padding-top: 18px;
 }
 
-.d-header .icons .icon:hover{
-    color: #ccc;
-    background-color: #263947;
-}
-
-.d-header .icons .icon {
-    -webkit-font-smoothing: antialiased;
-}
-
-.d-header .icons [class^="fa fa-"] {
-    width: 20px;
-    height: 20px;
-    font-size: 20px;
-    line-height: 32px;
-    display: inline-block;
-
-    padding-left: 4px;
-    padding-right: 4px;
-}
-
 .unread-private-messages {
     color: #204762;
     background-color: #c7ffc7;
@@ -140,21 +151,6 @@ header.d-header {
     .menu-panel {
         background-color: #b8ecc0;
     }
-}
-
-#current-user img.avatar {
-    width: 26px;
-    height: 26px;
-    margin-top: 2px;
-}
-
-#current-user img.avatar a:after {
-    font-size: 18px;
-    line-height: 25px;
-
-    font-weight: normal;
-    content: title;
-    vertical-align: middle;
 }
 
 .extra-info-wrapper {

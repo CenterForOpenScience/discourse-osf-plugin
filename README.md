@@ -36,4 +36,5 @@ We hide GUID usernames from showing up.
 
 ##Further Work/Bugs to Fix
 Make sure that \@mention and other notifications work in a way compatible with the OSF/the way we expect them to.
-The color of the OSF header and footer links and copyright styling appears to change when the page is loading, but the computed css styles show no change. Odd bug.
+
+Contributors/Settings/Analytics are not showing up when they would on the OSF.
