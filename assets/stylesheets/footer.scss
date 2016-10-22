@@ -24,7 +24,6 @@ footer.footer *, .copyright * {
 }
 
 footer.footer, .copyright {
-    text-decoration: underline;
     a:focus, a:hover {
         color: #23527c;
         text-decoration: underline;
@@ -46,8 +45,10 @@ footer.footer ul, footer.footer li {
 }
 
 footer.footer .container {
-    margin-left: 127px;
-    margin-right: 127px;
+    padding-left: 15px;
+    padding-right: 15px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 footer.footer * {

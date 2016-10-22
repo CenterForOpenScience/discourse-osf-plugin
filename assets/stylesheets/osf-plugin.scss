@@ -17,9 +17,12 @@ section#main {
     padding: 0px 15px;
 }
 
+.d-header .wrap {
+    padding: 0;
+}
+
 header .title a:after {
     font-size: 18px;
-    line-height: 25px;
     font-weight: normal;
     @media (max-width: 767px) {
         content: "OSF";
@@ -40,11 +43,20 @@ header {
     margin-bottom: 0;
 }
 
-.d-header .title a {
-    float: left;
+.d-header .title {
     padding: 12.5px 15px;
     height: 50px;
+    line-height: 25px;
     box-sizing: border-box;
+    @media (max-width: 767px) {
+        height: 48px;
+        line-height: 27px;
+        padding: 11px 15px 10px 15px;
+    }
+}
+
+.d-header .title a {
+    float: left;
 }
 
 .d-header #site-logo {
@@ -120,7 +132,8 @@ header.d-header {
     position: fixed;
     top: 0;
 
-    height: 50px;
+    min-height: 50px;
+    height: auto;
     padding-top: 0px;
 
     background-color: #214762;
@@ -136,6 +149,7 @@ header.d-header {
     border-color: rgba(8, 8, 8, 0.5);
 
     box-shadow: none;
+    box-sizing: border-box;
 }
 
 #main-outlet {
@@ -236,10 +250,9 @@ header.d-header {
 // For centering of the project header
 .osf-project-navbar > .container {
     margin: 0 auto;
-    padding: 0 15px;
 }
 
-.osf-project-navbar > .container, .d-header > .wrap {
+.osf-project-navbar > .container, .d-header > .wrap, footer.footer > .container {
     @media (min-width: 768px) {
         max-width: 750px;
     }
@@ -251,6 +264,9 @@ header.d-header {
     }
     @media (min-width: 1200px) {
         max-width: 1170px;
+    }
+    @media (min-width: 1600px) {
+        max-width: 1570px;
     }
 }
 
@@ -349,13 +365,18 @@ header.d-header {
 @media (max-width: 767px) {
     #main-outlet.has-osf-bar {
         padding-top: 0px;
+        margin-top: 11px;
     }
     .osf-project-navbar {
-        margin-top: -3px;
+        margin-top: -4px;
     }
     .project-nav ul {
         margin: 0;
+        margin-top: 7.5px;
         width: 100%;
+        border-top-color: rgba(0, 0, 0, 0);
+        border-top-style: solid;
+        border-top-width: 1px;
     }
     .project-nav ul > li {
         float: none;
@@ -380,10 +401,16 @@ header.d-header {
 }
 .navbar-brand {
     float: left;
-    padding: 12px 15px;
-    font-weight: 500;
     font-size: 18px;
-    line-height: 20px;
+    padding: 12.5px 15px;
+    height: 50px;
+    line-height: 25px;
+    box-sizing: border-box;
+    @media (max-width: 767px) {
+        height: 48px;
+        line-height: 27px;
+        padding: 11px 15px 10px 15px;
+    }
 }
 .navbar-brand, .navbar-nav > li > a {
     text-shadow: 0 1px 0 rgba(255, 255, 255, 0.25);
@@ -392,17 +419,22 @@ header.d-header {
 .navbar-toggle {
     position: relative;
     float: right;
-    margin: 0;
-    padding: 12px 15px;
+    padding: 9px 10px;
+    margin-top: 5px;
+    margin-bottom: 3px;
+    margin-right: 15px;
+    
     line-height: 20px;
     font-size: 14px;
     background-color: transparent;
     background-image: none;
-    border: 0px solid transparent;
+    border: 1px solid transparent;
+    border-radius: 4px;
 }
 .navbar-toggle:focus {
     outline: 0;
 }
+
 @media (min-width: 768px) {
     .osf-project-navbar {
         position: fixed;
@@ -422,6 +454,8 @@ header.d-header {
     }
     .project-nav {
         display: block !important; // Ignore the display setting used in mobile mode
+        padding-left: 15px;
+        padding-right: 15px;
     }
 }
 

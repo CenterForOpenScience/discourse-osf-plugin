@@ -36,5 +36,3 @@ We hide GUID usernames from showing up.
 
 ##Further Work/Bugs to Fix
 Make sure that \@mention and other notifications work in a way compatible with the OSF/the way we expect them to.
-
-Contributors/Settings/Analytics are not showing up when they would on the OSF.

@@ -17,6 +17,7 @@ import computed from 'ember-addons/ember-computed-decorators';
 import TopicListItem from 'discourse/components/topic-list-item';
 import TopicView from 'discourse/views/topic';
 import TopicTimeline from 'discourse/components/topic-timeline';
+import ApplicationRoute from 'discourse/routes/application';
 
 // startsWith polyfill from https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/startsWith
 if (!String.prototype.startsWith) {
@@ -29,6 +30,38 @@ if (!String.prototype.startsWith) {
 export default {
     name: "extend-for-osf",
     initialize() {
+        function getProjectModel() {
+            var projectModel = {};
+            var container = Discourse.__container__;
+            var route = container.lookup('controller:Application').currentPath;
+
+            if (route.startsWith('topic')) {
+                var topicController = container.lookup('controller:topic');
+                var topicModel = topicController.model;
+                if (topicModel.parent_names) {
+                    projectModel.parent_names = topicModel.parent_names;
+                    projectModel.parent_guids = topicModel.parent_guids;
+                    projectModel.contributors = topicModel.contributors;
+                    projectModel.project_is_public = topicModel.project_is_public;
+                    projectModel.view_only = topicController.view_only;
+                    return projectModel;
+                }
+            } else if (route.startsWith('projects.show') || route.startsWith('projects.top')) {
+                var projectController = container.lookup('controller:projects.show');
+                var projectList = projectController.list;
+                if (projectList && projectList.topic_list.parent_names) {
+                    var projectTopicList = projectList.topic_list;
+                    projectModel.parent_names = projectTopicList.parent_names;
+                    projectModel.parent_guids = projectTopicList.parent_guids;
+                    projectModel.contributors = projectTopicList.contributors;
+                    projectModel.project_is_public = projectTopicList.project_is_public;
+                    projectModel.view_only = projectController.view_only;
+                    return projectModel;
+                }
+            }
+            return null;
+        }
+
         function renderOsfProjectMenu() {
             var container = Discourse.__container__;
 
@@ -45,32 +78,14 @@ export default {
             var queryString = '';
 
             var currentUser = container.lookup('component:siteHeader').currentUser;
-            var contributors = null;
             var isContributor = false;
 
-            var route = container.lookup('controller:Application').currentPath;
-
-            if (route.startsWith('topic')) {
-                var topicController = container.lookup('controller:topic');
-                var topicModel = topicController.model;
-                if (topicModel.parent_names) {
-                    title = topicModel.parent_names[0];
-                    guid = topicModel.parent_guids[0];
-                    parent_guid = topicModel.parent_guids[1];
-                    contributors = topicModel.contributors;
-                }
-                queryString = topicController.view_only ? '?view_only=' + topicController.view_only : '';
-            } else if (route.startsWith('projects.show') || route.startsWith('projects.top')) {
-                var projectController = container.lookup('controller:projects.show');
-                var projectList = projectController.list;
-                if (projectList) {
-                    var projectTopicList = projectList.topic_list;
-                    title = projectTopicList.parent_names[0];
-                    guid = projectTopicList.parent_guids[0];
-                    parent_guid = projectTopicList.parent_guids[1];
-                    contributors = projectTopicList.contributors;
-                }
-                queryString = projectController.view_only ? '?view_only=' + projectController.view_only : '';
+            var projectModel = getProjectModel();
+            if (projectModel) {
+                title = projectModel.parent_names[0];
+                guid = projectModel.parent_guids[0];
+                parent_guid = projectModel.parent_guids[1];
+                queryString = projectModel.view_only ? '?view_only=' + projectModel.view_only : '';
             }
             if (!title) {
                 // empty
@@ -78,8 +93,8 @@ export default {
             }
 
             var isContributor = false;
-            if (!queryString && currentUser && contributors) {
-                _.each(contributors, c => {
+            if (!queryString && currentUser && projectModel.contributors) {
+                _.each(projectModel.contributors, c => {
                     if (c.username === currentUser.username) {
                         isContributor = true;
                     }
@@ -128,7 +143,7 @@ export default {
                                         'target': '_self'
                                     }, "Wiki")
                                 ),
-                                isContributor ? h('li',
+                                (isContributor || projectModel.project_is_public) ? h('li',
                                     h('a', {
                                         'href': `${base_osf_url}/${guid}/analytics/${queryString}`,
                                         'target': '_self'
@@ -415,6 +430,20 @@ export default {
                     args['top'] = Math.max(args['top'], 115);
                 }
                 return args;
+            }
+        });
+
+        // Set the title in the same manner as the OSF
+        ApplicationRoute.reopen({
+            actions: {
+                _collectTitleTokens(tokens) {
+                    var projectName = ' ';
+                    var projectModel = getProjectModel();
+                    if (projectModel) {
+                        projectName = projectModel.parent_names[0] + ' ';
+                    }
+                    Discourse.set('_docTitle', 'OSF | '+ projectName + 'Forum');
+                }
             }
         });
     }
