@@ -4,7 +4,6 @@ import { withPluginApi } from 'discourse/lib/plugin-api';
 import { createWidget, Widget } from 'discourse/widgets/widget';
 import { h } from 'virtual-dom';
 import VirtualDom from 'virtual-dom';
-import ShareButton from 'discourse/views/share-button';
 import PostMenu from 'discourse/widgets/post-menu';
 import MountWidget from 'discourse/components/mount-widget';
 import ComposerModel from 'discourse/models/composer';
@@ -251,6 +250,8 @@ export default {
                         if (sibling && sibling.textContent == username) {
                             sibling.textContent = name;
                         }
+                        // Sometimes a containing <a> will also have a title that needs to be changed
+                        elem.parentNode.title = elem.parentNode.title.replace(username, name);
                     }
                 }
             });
@@ -315,7 +316,11 @@ export default {
                         $('.project-nav').animate({height: 'toggle'});
                     });
 
-                    if (url.startsWith('/t/') || url.startsWith('/forum/')) {
+                    // A topic is not in a project if it has a slug that isn't a topic_guid (alphanumeric, 5 chars)
+                    //
+                    var slug = url.split('/')[2];
+                    var slugIsGuid = slug != 'topic' && slug.length <= 6;
+                    if ((url.startsWith('/t/') && slugIsGuid) || url.startsWith('/forum/')) {
                         $('#main-outlet').addClass('has-osf-bar');
                     } else {
                         $('#main-outlet').removeClass('has-osf-bar');

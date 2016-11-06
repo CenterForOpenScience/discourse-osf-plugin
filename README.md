@@ -26,8 +26,10 @@ When the post stream/topic widget rerenders, we make sure that "share" buttons o
 
 We also modify the expandPinned method of the topic list item. This method determines whether to show an excerpt from the topic in a topic-list. Normally, Discourse will only show an excerpt if a topic is pinned, but since we want to show excerpts for all topics, we have this return true as long as the topic in question actually has an excerpt to display.
 
+We add the OSF footer with the below-footer/footer.hbs connection.
+
 ##CSS Styling
-The styling is all done in osf-plugin.scss.
+The styling is all done in osf-plugin.scss and footer.scss with a little help from bootstrapcols.scss.
 
 We style the top Discourse header to look like the OSF header.
 We style the OSF project header to look like the OSF project header, and to duplicate functionality especially in mobile mode.
@@ -36,3 +38,7 @@ We hide GUID usernames from showing up.
 
 ##Further Work/Bugs to Fix
 Make sure that \@mention and other notifications work in a way compatible with the OSF/the way we expect them to.
+
+User gets alert of New topics even when they are unrelated to the project they are in. Perhaps because the event is received while on the main page, or something.
+   It seems that the project_guid is not sent with the messages because they are sent before the callback that sets all these other topic parameters.
+   Also, it seems that the overriding code on the js side is not being called, anyway.
