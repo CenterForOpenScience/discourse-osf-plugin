@@ -319,7 +319,7 @@ export default {
                     // A topic is not in a project if it has a slug that isn't a topic_guid (alphanumeric, 5 chars)
                     //
                     var slug = url.split('/')[2];
-                    var slugIsGuid = slug != 'topic' && slug.length <= 6;
+                    var slugIsGuid = slug && slug != 'topic' && slug.length <= 6;
                     if ((url.startsWith('/t/') && slugIsGuid) || url.startsWith('/forum/')) {
                         $('#main-outlet').addClass('has-osf-bar');
                     } else {
