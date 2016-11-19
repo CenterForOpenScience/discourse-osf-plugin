@@ -26,7 +26,11 @@ When the post stream/topic widget rerenders, we make sure that "share" buttons o
 
 We also modify the expandPinned method of the topic list item. This method determines whether to show an excerpt from the topic in a topic-list. Normally, Discourse will only show an excerpt if a topic is pinned, but since we want to show excerpts for all topics, we have this return true as long as the topic in question actually has an excerpt to display.
 
+We modify TopicTimeline so that it places itself lower when the osf project bar is being shown.
+
 We add the OSF footer with the below-footer/footer.hbs connection.
+
+We modify the ApplicationRoute so that we can force the page title to follow the OSF convention: 'OSF | '+ projectName + 'Forum'.
 
 ##CSS Styling
 The styling is all done in osf-plugin.scss and footer.scss with a little help from bootstrapcols.scss.

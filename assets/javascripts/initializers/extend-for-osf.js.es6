@@ -463,11 +463,8 @@ export default {
         ApplicationRoute.reopen({
             actions: {
                 _collectTitleTokens(tokens) {
-                    var projectName = ' ';
                     var projectModel = getProjectModel();
-                    if (projectModel) {
-                        projectName = projectModel.parent_names[0] + ' ';
-                    }
+                    var projectName = projectModel ? projectModel.parent_names[0] + ' ' : ' ';
                     Discourse.set('_docTitle', 'OSF | '+ projectName + 'Forum');
                 }
             }
