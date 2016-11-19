@@ -9,7 +9,7 @@ import MountWidget from 'discourse/components/mount-widget';
 import ComposerModel from 'discourse/models/composer';
 import ComposerController from 'discourse/controllers/composer';
 import { wantsNewWindow } from 'discourse/lib/intercept-click';
-import UserCardView from 'discourse/views/user-card';
+import UserCardContents from 'discourse/components/user-card-contents';
 import TopicListModel from 'discourse/models/topic-list';
 import DiscoveryTopics from 'discourse/controllers/discovery/topics';
 import computed from 'ember-addons/ember-computed-decorators';
@@ -18,6 +18,8 @@ import TopicView from 'discourse/views/topic';
 import TopicTimeline from 'discourse/components/topic-timeline';
 import ApplicationRoute from 'discourse/routes/application';
 import { avatarImg } from 'discourse/widgets/post';
+import { registerUnbound } from 'discourse-common/lib/helpers';
+import { renderAvatar } from 'discourse/helpers/user-avatar';
 
 // startsWith polyfill from https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/startsWith
 if (!String.prototype.startsWith) {
@@ -178,8 +180,18 @@ export default {
                     ]
                 )
             );
-
         }
+
+        // To use full names instead of usernames, we first try to fix the avatar helper method to do this for us.
+        // This only works if the user object actually has the name field filled in.
+        // We do this mainly for user-selector-autocomplete, which would otherwise be difficult to correct.
+        // modified from discourse/helpers/user-avatar
+        registerUnbound('avatar', function(user, params) {
+            if (user.name) {
+                user.title = user.name;
+            }
+            return new Handlebars.SafeString(renderAvatar.call(this, user, params));
+        });
 
         var replaceUsernames = function() {
             // We want to make all these image tags have tooltips with the name, not the username
@@ -359,21 +371,11 @@ export default {
         });
 
         // Because we modify @mentions to show full names, we also have to modify the click handler
-        UserCardView.reopen({
-            _setup: function() {
+        UserCardContents.reopen({
+            didInsertElement: function() {
                 this._super();
 
                 const clickMention = 'click.discourse-user-mention';
-                const expand = (username, $target) => {
-                  const postId = $target.parents('article').data('post-id'),
-                    user = this.get('controller').show(username, postId, $target[0]);
-                  if (user !== undefined) {
-                    user.then( () => this._willShow($target) ).catch( () => this._hide() );
-                  } else {
-                    this._hide();
-                  }
-                  return false;
-                };
 
                 // Replace the default mention click handler with one that
                 // uses the href to find the username instead of the display text
@@ -383,9 +385,9 @@ export default {
 
                     const $target = $(e.target);
                     const username = $target.attr('href').replace('/users/', '');
-                    return expand(username, $target);
+                    return this._show(username, $target);
                 });
-            }.on('didInsertElement')
+            }
         });
 
         // After "mounting"/rendering of the topic/poststream "widget"
