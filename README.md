@@ -37,8 +37,4 @@ We add a couple of styles needed by the MFR javascript to correctly calculate PD
 We hide GUID usernames from showing up.
 
 ##Further Work/Bugs to Fix
-Make sure that \@mention and other notifications work in a way compatible with the OSF/the way we expect them to.
-
-User gets alert of New topics even when they are unrelated to the project they are in. Perhaps because the event is received while on the main page, or something.
-   It seems that the project_guid is not sent with the messages because they are sent before the callback that sets all these other topic parameters.
-   Also, it seems that the overriding code on the js side is not being called, anyway.
+Make sure that \@mention and other notifications work in a way compatible with the OSF/the way we expect them to. (might have to wait until we have a Discourse sending emails to see what happens over the long term, but it might just be good to trust Discourse and its job of allowing users to change notification settings)

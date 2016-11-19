@@ -17,6 +17,7 @@ import TopicListItem from 'discourse/components/topic-list-item';
 import TopicView from 'discourse/views/topic';
 import TopicTimeline from 'discourse/components/topic-timeline';
 import ApplicationRoute from 'discourse/routes/application';
+import { avatarImg } from 'discourse/widgets/post';
 
 // startsWith polyfill from https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/startsWith
 if (!String.prototype.startsWith) {
@@ -184,7 +185,7 @@ export default {
             // We want to make all these image tags have tooltips with the name, not the username
             // We specify just the ones we want because we don't want to mess with the ones
             // that show up for the autocorrect, which should show both username and full name
-            var avatarElems = document.querySelectorAll('#current-user img, .topic-avatar img, .reply-to img, .reply-to-tab img, .posters img, .topic-map img, .user-image img');
+            var avatarElems = document.querySelectorAll('#current-user img, .topic-avatar img, .reply-to img, .reply-to-tab img, .posters img, .topic-map img, .user-image img, .author img');
 
             var usernamesToNames = {};
 
@@ -222,6 +223,13 @@ export default {
                     });
                     _.each(topicModel.contributors, contributor => {
                         usernamesToNames[contributor.username] = contributor.name;
+                    });
+                }
+            } else if (route.startsWith('full-page-search')) {
+                var resultsModel = container.lookup('controller:full-page-search').model;
+                if (resultsModel) {
+                    _.each(resultsModel.posts, post => {
+                        usernamesToNames[post.username] = post.name;
                     });
                 }
             }
@@ -328,6 +336,19 @@ export default {
 
                     replaceUsernames();
                 });
+            });
+
+            // Override this widget to use full names
+            api.createWidget(`search-result-user`, {
+                html(attrs) {
+                    return attrs.results.map(r => {
+                        return h('li', this.attach('link', {
+                            href: r.get('path'),
+                            contents: () => [ avatarImg('small', { template: r.avatar_template, username: r.name }), ' ', r.name ],
+                            className: 'search-link'
+                        }));
+                    });
+                }
             });
         });
 
