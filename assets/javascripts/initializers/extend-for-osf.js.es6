@@ -182,9 +182,8 @@ export default {
             );
         }
 
-        // To use full names instead of usernames, we first try to fix the avatar helper method to do this for us.
-        // This only works if the user object actually has the name field filled in.
-        // We do this mainly for user-selector-autocomplete, which would otherwise be difficult to correct.
+        // This allows us to use the name instead of username for the title in
+        // user-selector-autocomplete, which would otherwise be difficult to correct.
         // modified from discourse/helpers/user-avatar
         registerUnbound('avatar', function(user, params) {
             if (user.name) {
@@ -271,7 +270,15 @@ export default {
                             sibling.textContent = name;
                         }
                         // Sometimes a containing <a> will also have a title that needs to be changed
-                        elem.parentNode.title = elem.parentNode.title.replace(username, name);
+                        if (elem.parentNode) {
+                            elem.parentNode.title = elem.parentNode.title.replace(username, name);
+                            // Also try the siblings of the parent...
+                            var parentSibling = elem.parentNode.nextSibling;
+                            while (parentSibling) {
+                                parentSibling.textContent = parentSibling.textContent.replace(username, name);
+                                parentSibling = parentSibling.nextSibling;
+                            }
+                        }
                     }
                 }
             });
