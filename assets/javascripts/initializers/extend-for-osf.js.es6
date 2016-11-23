@@ -14,12 +14,13 @@ import TopicListModel from 'discourse/models/topic-list';
 import DiscoveryTopics from 'discourse/controllers/discovery/topics';
 import computed from 'ember-addons/ember-computed-decorators';
 import TopicListItem from 'discourse/components/topic-list-item';
-import TopicView from 'discourse/views/topic';
+import TopicComponent from 'discourse/components/discourse-topic';
 import TopicTimeline from 'discourse/components/topic-timeline';
 import ApplicationRoute from 'discourse/routes/application';
 import { avatarImg } from 'discourse/widgets/post';
 import { registerUnbound } from 'discourse-common/lib/helpers';
 import { renderAvatar } from 'discourse/helpers/user-avatar';
+import { observes } from 'ember-addons/ember-computed-decorators';
 
 // startsWith polyfill from https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/startsWith
 if (!String.prototype.startsWith) {
@@ -371,10 +372,11 @@ export default {
             });
         });
 
-        TopicView.reopen({
-            topicModelChanged: function() {
+        TopicComponent.reopen({
+            @observes('topic.parent_guids', 'topic.parent_names')
+            topicModelChanged() {
                 Ember.run.scheduleOnce('afterRender', updateProjectHeader);
-            }.observes('topic.parent_guids', 'topic.parent_names')
+            }
         });
 
         // Because we modify @mentions to show full names, we also have to modify the click handler
