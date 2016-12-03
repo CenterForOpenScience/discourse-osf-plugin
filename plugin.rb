@@ -3,7 +3,6 @@
 # version: 0.1
 # author: Joshua Bird, Acshi Haggenmiller
 
-enabled_site_setting :osf_plugin_enabled
 register_asset 'stylesheets/osf-plugin.scss'
 register_asset 'stylesheets/bootstrapcols.scss'
 register_asset 'stylesheets/footer.scss'

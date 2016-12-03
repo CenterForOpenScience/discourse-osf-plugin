@@ -1,7 +1,4 @@
 plugins:
-  osf_plugin_enabled:
-    default: true
-    client: true
   osf_domain:
     default: http://localhost:5000
     client: true
