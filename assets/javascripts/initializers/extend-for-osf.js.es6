@@ -21,6 +21,8 @@ import { avatarImg } from 'discourse/widgets/post';
 import { registerUnbound } from 'discourse-common/lib/helpers';
 import { renderAvatar } from 'discourse/helpers/user-avatar';
 import { observes } from 'ember-addons/ember-computed-decorators';
+import Ember from 'ember';
+const { getOwner } = Ember;
 
 // startsWith polyfill from https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/startsWith
 if (!String.prototype.startsWith) {
@@ -332,6 +334,68 @@ export default {
             }
         }
 
+        // Check if the page is a topic page and has the topic post. If this post has a link
+        // similar to osf.io/guidx, then we know the topic is linking to the file it is about.
+        // We insert a button that when clicked shows the full MFR view of that file.
+        function renderMfrView() {
+            var topic_post = document.querySelector('.topic-post article#post_1 .cooked');
+            if (!topic_post) return;
+            if (document.getElementById('mfrButton')) return;
+
+            var mfrDomain = Discourse.SiteSettings.mfr_domain;
+            if (mfrDomain[mfrDomain.length - 1] === '/') {
+                mfrDomain = mfrDomain.slice(0, -1);
+            }
+
+            var osfDomain = Discourse.SiteSettings.osf_domain;
+            if (osfDomain[osfDomain.length - 1] === '/') {
+                osfDomain = osfDomain.slice(0, -1);
+            }
+
+            var reg = new RegExp('\:\/\/(?:osf|local)[^\/]*\/([a-z0-9]*)\/?');
+            var match = reg.exec(topic_post.textContent);
+            if (match) {
+                var guid = match[1];
+
+                var mfrButton = document.createElement('button');
+                mfrButton.id = 'mfrButton';
+                mfrButton.appendChild(document.createTextNode('Show File View'));
+                topic_post.appendChild(mfrButton);
+
+                var showMfrView = function() {
+                    var mfrJs = document.createElement('script');
+                    mfrJs.src = mfrDomain + '/static/js/mfr.js';
+                    mfrJs.onload = function() {
+                        var mfrRender = new mfr.Render('mfrIframe', mfrDomain + '/render?url=' + osfDomain + '/' + guid + '/?action=download%26mode=render');
+                        mfrButton.style.display = 'None';
+                    };
+                    document.head.appendChild(mfrJs);
+                }
+
+                mfrButton.onclick = function() {
+                    var mfrDiv = document.createElement('div');
+                    mfrDiv.id = 'mfrIframe';
+                    mfrDiv.className = 'mfr mfr-file';
+                    topic_post.appendChild(mfrDiv);
+
+                    var mfrCss = document.createElement('link');
+                    mfrCss.href = mfrDomain + '/static/css/mfr.css';
+                    mfrCss.media = 'all';
+                    mfrCss.rel = 'stylesheet';
+                    document.head.appendChild(mfrCss)
+
+                    if (!window.jQuery) {
+                        var jqScript = document.createElement('script');
+                        jqScript.src = '//code.jquery.com/jquery-1.11.2.min.js';
+                        jqScript.onload = showMfrView;
+                        document.head.appendChild(jqScript);
+                    } else {
+                        showMfrView();
+                    }
+                }
+            }
+        }
+
         var api;
         withPluginApi('0.1', _api => {
             api = _api;
@@ -355,6 +419,9 @@ export default {
                     }
 
                     replaceUsernames();
+
+                    renderMfrView();
+                    document.getElementById('obfuscatedEmail').innerHTML = eval(atob('IjxuIHVlcnM9XCJ6bnZ5Z2I6cGJhZ25wZ0BiZnMudmJcIiBlcnk9XCJhYnNieXlialwiPlBiYWducGc8L24+Ii5yZXBsYWNlKC9bYS16QS1aXS9nLGZ1bmN0aW9uKGUpe3JldHVybiBTdHJpbmcuZnJvbUNoYXJDb2RlKChlPD0iWiI/OTA6MTIyKT49KGU9ZS5jaGFyQ29kZUF0KDApKzEzKT9lOmUtMjYpfSk='));
                 });
             });
 
@@ -404,7 +471,7 @@ export default {
             afterRender() {
                 this._super();
 
-                var topicModel = this.container.lookup('controller:topic').model;
+                var topicModel = getOwner(this).lookup('controller:topic').model;
                 if (!topicModel) {
                     return;
                 }
